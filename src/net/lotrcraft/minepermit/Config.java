@@ -86,6 +86,7 @@ public class Config {
 				}
 
 				Miner m = loadPlayerConf(playerFiles[counter]);
+				MinerManager.addMiner(m);
 
 				log.info("[MinePermit] " + m.getPlayer() + " loaded!");
 
@@ -108,9 +109,9 @@ public class Config {
 		List<ConfigurationNode> list = config.getNodeList("Blocks", null);
 
 		if (list == null) {
+
 			
 		} else {
-
 			for (int counter = 0; counter < list.size(); counter++) {
 				miner.addPermit((getInt("id", counter, list.get(counter))), getInt("time", counter, list.get(counter)) * 60000L);
 			}
