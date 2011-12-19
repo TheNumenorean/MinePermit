@@ -1,0 +1,20 @@
+main: net.lotrcraft.minepermit.MinePermit
+author: Numenorean95
+name: MinePermit
+version: 1.0.0
+website: http://lotrcraft.net/plugins/minepermit
+
+commands:
+    wheatheal:
+        description: List of Commands
+        aliases: permit
+        usage: |
+            /<command> - List of commands
+            /<command> buy [item] - Buys permit
+            /<command> cost [item] - Display cost of certain permit
+            /<command> view [item] - Displays remaining time fo permit
+
+permissions:
+    MinePermit.exempt:
+        description: Exempts player from mining permit requirements
+        default: op
