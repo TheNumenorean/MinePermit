@@ -49,5 +49,9 @@ public class Miner {
 	public void removePermit(int blockID){
 		permits.remove(blockID);
 	}
+	
+	public String toString(){
+		return player;
+	}
 
 }

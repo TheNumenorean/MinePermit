@@ -1,66 +1,59 @@
 package net.lotrcraft.minepermit;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
-import net.lotrcraft.config.Configuration;
-import net.lotrcraft.config.ConfigurationNode;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config {
 
 	static int cost;
-	static final File pluginFolder = new File("plugins" + File.separator + "MinePermit");
+	static final File pluginFolder = new File("plugins" + File.separator
+			+ "MinePermit");
 	static Logger log = Logger.getLogger("minecraft");
 	private static Map<Integer, Integer> blocks = new TreeMap<Integer, Integer>();
-	private static final File conf = new File(pluginFolder.getPath() + File.separator + "config.yml");
+	static final File conf = new File(pluginFolder.getPath() + File.separator
+			+ "config.yml");
 
-	public static void load(Configuration config) {
-		
-		if(!pluginFolder.exists())
-			pluginFolder.mkdir();
-		
-		if(!conf.exists()){
-			try {
-				conf.createNewFile();
-			} catch (IOException e) {
-				log.warning("[MinePermit] Cannot create conf file!");
-			}
-		}
-		
-		config.load();
+	public static void load(FileConfiguration config) throws IOException,
+			InvalidConfigurationException {
 
-		Map<String, ConfigurationNode> list = config.getNodes("Blocks");
+		ConfigurationSection sect = config.getConfigurationSection("Blocks");
+		Set<String> list;
 
-		if (list == null || list.isEmpty()) {
+		if (sect == null || (list = sect.getKeys(false)) == null
+				|| list.isEmpty()) {
 			log.warning("[MinePermit] No Blocks detected!");
-			config.setProperty("Blocks", null);
-			
-			
-			
-			//config.setProperty("Blocks.block.id", 2);
-			//config.setProperty("Blocks.block.time", 3);
-			
+			config.set("Blocks", "");
+
+			// config.setProperty("Blocks.block.id", 2);
+			// config.setProperty("Blocks.block.time", 3);
+
 			blocks.put(3, 3);
-		
+
 		} else {
 
 			for (int counter = 0; counter < list.size(); counter++) {
-				blocks.put(getInt("Blocks." + list.keySet().toArray()[counter] + ".id", counter, config), 
-						getInt("Blocks." + list.keySet().toArray()[counter] + ".cost", 50, config));
+				blocks.put(
+						getInt(list.toArray()[counter] + ".id", counter, sect),
+						getInt(list.toArray()[counter] + ".cost", 50, sect));
 
 			}
-			
-
 
 		}
-		
-		config.save();
 
-		File playerDataFolder = new File("plugins" + File.separator + "MinePermit" + File.separator + "Players");
+		config.save(conf);
+
+		File playerDataFolder = new File("plugins" + File.separator
+				+ "MinePermit" + File.separator + "Players");
 
 		MinePermit.log.info("[MinePermit] Loading Players...");
 
@@ -97,23 +90,28 @@ public class Config {
 
 	}
 
-	public static Miner loadPlayerConf(File file) {
-		Configuration config = new Configuration(file);
+	public static Miner loadPlayerConf(File file) throws FileNotFoundException,
+			IOException, InvalidConfigurationException {
+		FileConfiguration config = new YamlConfiguration();
+		config.load(file);
 		String playerName = file.getName().substring(0,
 				file.getName().indexOf('.'));
 
-		config.load();
-
 		Miner miner = new Miner(playerName);
+		ConfigurationSection sect = config.getConfigurationSection("Blocks");
+		Set<String> list;
 
-		List<ConfigurationNode> list = config.getNodeList("Blocks", null);
+		if (sect == null || (list = sect.getKeys(false)) == null
+				|| list.isEmpty()) {
+			log.warning("[MinePermit] No Permits detected!");
+			config.set("Blocks", null);
 
-		if (list == null) {
-
-			
 		} else {
+
 			for (int counter = 0; counter < list.size(); counter++) {
-				miner.addPermit((getInt("id", counter, list.get(counter))), getInt("time", counter, list.get(counter)) * 60000L);
+				miner.addPermit(
+						(getInt(list.toArray()[counter] + "id", counter, sect)),
+						getInt(list.toArray()[counter] + "time", counter, sect) * 60000L);
 			}
 		}
 
@@ -121,58 +119,71 @@ public class Config {
 	}
 
 	public static void savePlayerConf(Miner m) {
-		Configuration g = new Configuration(new File(pluginFolder.getPath() + File.separator + "Players" + File.separator +  m.getPlayer() + ".yml"));
+		YamlConfiguration g = new YamlConfiguration();
 		Map<Integer, Long> p = m.getPermits();
-		g.load();
-		
-		for (int y = 0; y < p.size(); y++){		
-			
-			g.setProperty("Blocks.block" + y + ".id", p.keySet().toArray()[y]);
-			g.setProperty("Blocks.block" + y + ".time", m.getRemainingTime((Integer) p.keySet().toArray()[y]));
-		
+		File f = new File(pluginFolder.getPath() + File.separator + "Players"
+				+ File.separator + m.getPlayer() + ".yml");
+
+		try {
+			if (!f.exists()) {
+				f.createNewFile();
+			}
+
+			g.load(f);
+
+			for (int y = 0; y < p.size(); y++) {
+
+				g.set("Blocks.block" + y + ".id", p.keySet().toArray()[y]);
+				g.set("Blocks.block" + y + ".time",
+						m.getRemainingTime((Integer) p.keySet().toArray()[y]));
+
+			}
+
+			g.save(f);
+		} catch (IOException io) {
+			io.printStackTrace();
+		} catch (InvalidConfigurationException e) {
+			e.printStackTrace();
 		}
-		
-		g.save();
-	}	
-	
+	}
+
 	public static boolean isPermitRequired(int typeId) {
 		return blocks.containsKey(typeId);
 	}
-	
-	public static int getCost(int itemID){
+
+	public static int getCost(int itemID) {
 		return blocks.get(itemID);
 	}
 
 	// Functions for AutoUpdating the Config.yml
-	public Object getProperty(String path, Object def, Configuration config) {
+	public Object getProperty(String path, Object def,
+			ConfigurationSection config) {
 		if (isNull(path, config))
 			return setProperty(path, def, config);
-		return config.getProperty(path);
+		return config.get(path);
 	}
 
-	public static int getInt(String path, Integer def, ConfigurationNode config) {
-		if (isNull(path, config))
-			return (Integer) setProperty(path, def, config);
-		return config.getInt(path, def);
+	public static int getInt(String path, Integer def, ConfigurationSection sect) {
+		if (isNull(path, sect))
+			return (Integer) setProperty(path, def, sect);
+		return sect.getInt(path, def);
 	}
 
 	public static Boolean getBoolean(String path, Boolean def,
-			Configuration config) {
+			ConfigurationSection config) {
 		if (isNull(path, config))
 			return (Boolean) setProperty(path, def, config);
 		return config.getBoolean(path, def);
 	}
 
 	private static Object setProperty(String path, Object val,
-			ConfigurationNode config) {
-		config.setProperty(path, val);
+			ConfigurationSection sect) {
+		sect.set(path, val);
 		return val;
 	}
 
-	private static boolean isNull(String path, ConfigurationNode config) {
-		return config.getProperty(path) == null;
+	private static boolean isNull(String path, ConfigurationSection sect) {
+		return sect.get(path) == null;
 	}
-
-
 
 }

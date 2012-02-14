@@ -13,92 +13,104 @@ import org.bukkit.inventory.ItemStack;
 public class CommandInterpreter implements CommandExecutor {
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmnd, String arg2, String[] arg3) {
-		
-		if (sender instanceof ConsoleCommandSender){
-			MinePermit.log.info("[MinePermit] Sorry, commands cant be sent from console yet.");
+	public boolean onCommand(CommandSender sender, Command cmnd, String arg2,
+			String[] arg3) {
+
+		// Console cant send commands
+		if (sender instanceof ConsoleCommandSender) {
+			MinePermit.log
+					.info("[MinePermit] Sorry, commands cant be sent from console yet.");
 			return true;
 		}
-		
+
 		Player p = (Player) sender;
-		
-		if (arg3[0].equalsIgnoreCase("view")){
-			
+
+		// Make sure there is a secondary parameter
+		if (arg3.length == 0) {
+			return false;
+
+		} else if (arg3[0].equalsIgnoreCase("view")) {
+
 			Miner m = MinerManager.getMiner(p);
-			
+
 			int id;
-			
-			try{
+
+			try {
 				id = Integer.parseInt(arg3[1]);
-			} catch (Exception e){
-				
+			} catch (Exception e) {
+
 				String s = "";
 				Map<Integer, Long> tmp = m.getPermits();
-				
-				for(int y = 0; y < tmp.size(); y++){
+
+				for (int y = 0; y < tmp.size(); y++) {
 					int n = (Integer) tmp.keySet().toArray()[y];
-					
+
 					s = s + n + ": " + m.getRemainingTime(n) + " minutes\n";
 				}
-				
+
 				p.sendMessage(ChatColor.DARK_GREEN + s);
 				return true;
 			}
-			
-			if (!m.hasPermit(id)){
-				p.sendMessage(ChatColor.DARK_RED + "You do not own a permit for " + id);
-			}else {
-				p.sendMessage(ChatColor.DARK_GREEN + "You have " + m.getRemainingTime(id) + " minutes left.");
+
+			if (!m.hasPermit(id)) {
+				p.sendMessage(ChatColor.DARK_RED
+						+ "You do not own a permit for " + id);
+			} else {
+				p.sendMessage(ChatColor.DARK_GREEN + "You have "
+						+ m.getRemainingTime(id) + " minutes left.");
 			}
-			
+
 			return true;
-			
-			
-		} else if (arg3[0].equalsIgnoreCase("price")){
-			
+
+		} else if (arg3[0].equalsIgnoreCase("price")) {
+
 			int id;
-			
-			try{
+
+			try {
 				id = Integer.parseInt(arg3[1]);
-			} catch (NumberFormatException e){
+			} catch (NumberFormatException e) {
 				return false;
 			}
-			
-			if(!Config.isPermitRequired(id)){
-				p.sendMessage(ChatColor.GRAY + "A permit is not required for this item.");
+
+			if (!Config.isPermitRequired(id)) {
+				p.sendMessage(ChatColor.GRAY
+						+ "A permit is not required for this item.");
 				return true;
 			}
-			
-			
-			p.sendMessage(ChatColor.AQUA + "The cost for this item is " + Config.getCost(id) + " dolars");
+
+			p.sendMessage(ChatColor.AQUA + "The cost for this item is "
+					+ Config.getCost(id) + " dolars");
 			return true;
-			
-		} else if (arg3[0].equalsIgnoreCase("buy")){
-			
+
+		} else if (arg3[0].equalsIgnoreCase("buy")) {
+
 			int id;
-			
-			try{
+
+			try {
 				id = Integer.parseInt(arg3[1]);
-			} catch (NumberFormatException e){
+			} catch (NumberFormatException e) {
 				return false;
 			}
-			
-			if(!Config.isPermitRequired(id)){
-				p.sendMessage(ChatColor.GRAY + "A permit is not required for this item.");
+
+			if (!Config.isPermitRequired(id)) {
+				p.sendMessage(ChatColor.GRAY
+						+ "A permit is not required for this item.");
 				return true;
 			}
-			
-			if (!p.getInventory().contains(371, Config.getCost(id))){
-				p.sendMessage(ChatColor.DARK_RED + "You dont have enough money!");
+
+			if (!p.getInventory().contains(371, Config.getCost(id))) {
+				p.sendMessage(ChatColor.DARK_RED
+						+ "You dont have enough money!");
 				return true;
 			}
-			
+
 			int cost = Config.getCost(id);
-			
-			while (cost > 0){
-				ItemStack x = p.getInventory().getItem(p.getInventory().first(371));
-				
-				if(x.getAmount() < cost){
+
+			while (cost > 0) {
+				ItemStack x = p.getInventory().getItem(
+						p.getInventory().first(371));
+
+				if (x.getAmount() < cost) {
 					cost -= x.getAmount();
 					x.setAmount(0);
 				} else {
@@ -106,15 +118,14 @@ public class CommandInterpreter implements CommandExecutor {
 					cost = 0;
 				}
 			}
-			
+
 			MinerManager.getMiner(p).addPermit(id, 60);
-			
+
 			p.sendMessage(ChatColor.DARK_GREEN + "Permit purchased!");
-			
+
 			return true;
 		}
-		
-		
+
 		return false;
 	}
 }

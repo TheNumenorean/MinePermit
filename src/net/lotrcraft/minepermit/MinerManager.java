@@ -44,7 +44,10 @@ public class MinerManager {
 	public static void savePlayers() {
 		
 		for(int y = 0; y < miners.size(); y++){
-			Config.savePlayerConf(miners.get(miners.keySet().toArray()[y]));
+			Miner m = miners.get(miners.keySet().toArray()[y]);
+			MinePermit.log.info("[MinePermit] Saving conf for " + m);
+			Config.savePlayerConf(m);
+			MinePermit.log.info("[MinePermit] Conf for " + m + " saved");
 		}
 		
 	}

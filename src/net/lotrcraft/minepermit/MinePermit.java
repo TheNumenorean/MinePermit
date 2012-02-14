@@ -1,11 +1,11 @@
 package net.lotrcraft.minepermit;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.logging.Logger;
 
-import net.lotrcraft.config.Configuration;
-
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,7 +39,26 @@ public class MinePermit extends JavaPlugin {
 	}
 
 	private void loadConf() {
-		Config.load(new Configuration(new File(Config.pluginFolder.getPath() + File.separator + "config.yml")));
+		
+		if(!Config.pluginFolder.exists())
+			Config.pluginFolder.mkdir();
+		
+		if(!Config.conf.exists()){
+			try {
+				Config.conf.createNewFile();
+			} catch (IOException e) {
+				log.warning("[MinePermit] Cannot create conf file!");
+				return;
+			}
+		}
+		
+		try {
+			Config.load(this.getConfig());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InvalidConfigurationException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
