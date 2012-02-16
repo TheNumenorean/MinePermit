@@ -18,8 +18,7 @@ public class CommandInterpreter implements CommandExecutor {
 
 		// Console cant send commands
 		if (sender instanceof ConsoleCommandSender) {
-			MinePermit.log
-					.info("[MinePermit] Sorry, commands cant be sent from console yet.");
+			MinePermit.log.info("[MinePermit] Sorry, commands cant be sent from console yet.");
 			return true;
 		}
 
@@ -41,14 +40,18 @@ public class CommandInterpreter implements CommandExecutor {
 
 				String s = "";
 				Map<Integer, Long> tmp = m.getPermits();
-
+				
+				if(tmp.isEmpty()){
+					p.sendMessage(ChatColor.YELLOW + "You don't own any permits!");
+					return true;
+				}
+					
 				for (int y = 0; y < tmp.size(); y++) {
 					int n = (Integer) tmp.keySet().toArray()[y];
 
-					s = s + n + ": " + m.getRemainingTime(n) + " minutes\n";
+					p.sendMessage(ChatColor.DARK_GREEN + "" + n + ": " + m.getRemainingTime(n) + " minutes.");
 				}
 
-				p.sendMessage(ChatColor.DARK_GREEN + s);
 				return true;
 			}
 
@@ -62,7 +65,7 @@ public class CommandInterpreter implements CommandExecutor {
 
 			return true;
 
-		} else if (arg3[0].equalsIgnoreCase("price")) {
+		} else if (arg3[0].equalsIgnoreCase("cost")) {
 
 			int id;
 
@@ -86,18 +89,28 @@ public class CommandInterpreter implements CommandExecutor {
 
 			int id;
 
+			//Atempt to get an id number for the block
 			try {
 				id = Integer.parseInt(arg3[1]);
 			} catch (NumberFormatException e) {
 				return false;
 			}
 
+			//Check if a permit is required for this block
 			if (!Config.isPermitRequired(id)) {
 				p.sendMessage(ChatColor.GRAY
 						+ "A permit is not required for this item.");
 				return true;
 			}
-
+			
+			//Check if the player already has a permit for this
+			if(MinerManager.getMiner(p).hasPermit(id)){
+				p.sendMessage(ChatColor.AQUA + "You already have a permit for this!");
+				return true;
+			}
+			
+			//Check if the player has enough money
+			//TODO: Convert to Economy plugin?
 			if (!p.getInventory().contains(371, Config.getCost(id))) {
 				p.sendMessage(ChatColor.DARK_RED
 						+ "You dont have enough money!");

@@ -101,17 +101,17 @@ public class Config {
 		ConfigurationSection sect = config.getConfigurationSection("Blocks");
 		Set<String> list;
 
-		if (sect == null || (list = sect.getKeys(false)) == null
-				|| list.isEmpty()) {
-			log.warning("[MinePermit] No Permits detected!");
+		if (sect == null || (list = sect.getKeys(false)) == null || list.isEmpty()) {
+			//log.warning("[MinePermit] No Permits detected!");
 			config.set("Blocks", null);
+			config.save(file);
 
 		} else {
 
 			for (int counter = 0; counter < list.size(); counter++) {
 				miner.addPermit(
-						(getInt(list.toArray()[counter] + "id", counter, sect)),
-						getInt(list.toArray()[counter] + "time", counter, sect) * 60000L);
+						(getInt(list.toArray()[counter] + ".id", counter, sect)),
+						getInt(list.toArray()[counter] + ".time", counter, sect));
 			}
 		}
 
@@ -130,12 +130,15 @@ public class Config {
 			}
 
 			g.load(f);
+			g.set("Blocks", null);
 
 			for (int y = 0; y < p.size(); y++) {
+				
+				Object blckID = p.keySet().toArray()[y];
 
-				g.set("Blocks.block" + y + ".id", p.keySet().toArray()[y]);
-				g.set("Blocks.block" + y + ".time",
-						m.getRemainingTime((Integer) p.keySet().toArray()[y]));
+				g.set("Blocks.block" + blckID + ".id", blckID);
+				g.set("Blocks.block" + blckID + ".time",
+						m.getRemainingTime((Integer) blckID));
 
 			}
 

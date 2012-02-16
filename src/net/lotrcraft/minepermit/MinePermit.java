@@ -6,8 +6,12 @@ import java.util.logging.Logger;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MinePermit extends JavaPlugin {
@@ -29,7 +33,7 @@ public class MinePermit extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		
-		this.getServer().getPluginManager().registerEvent(Type.BLOCK_BREAK, new Listener(), Priority.Normal, this);
+		this.getServer().getPluginManager().registerEvents(new BlockListener(), this);
 		
 		loadConf();
 		getCommand("permit").setExecutor(new CommandInterpreter());

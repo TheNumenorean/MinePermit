@@ -17,15 +17,9 @@ public class Miner {
 	}
 	
 	public boolean hasPermit(int blockID){
-		if(permits.containsKey(blockID)){
-			
-			if(permits.get(blockID) - System.currentTimeMillis() <= 0){
-				removePermit(blockID);
-				return false;
-			}
-			
+		if(permits.containsKey(blockID) && checkTime(blockID))
 			return true;
-		}
+		
 		return false;
 	}
 	
@@ -38,7 +32,9 @@ public class Miner {
 		
 	}
 	
-	public Long getRemainingTime(int blockID){
+	public long getRemainingTime(int blockID){
+		if(!hasPermit(blockID))
+			return 0;
 		return (permits.get(blockID) - System.currentTimeMillis()) / 60000;
 	}
 	
@@ -48,6 +44,19 @@ public class Miner {
 	
 	public void removePermit(int blockID){
 		permits.remove(blockID);
+	}
+	
+	public boolean checkTime(int id){
+		if(permits.containsKey(id)){
+			
+			if(permits.get(id) - System.currentTimeMillis() <= 0){
+				removePermit(id);
+				return false;
+			}
+			
+			return true;
+		}
+		return false;
 	}
 	
 	public String toString(){
