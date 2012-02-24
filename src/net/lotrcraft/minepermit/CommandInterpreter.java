@@ -71,7 +71,9 @@ public class CommandInterpreter implements CommandExecutor {
 
 			try {
 				id = Integer.parseInt(arg3[1]);
-			} catch (NumberFormatException e) {
+			} catch (ArrayIndexOutOfBoundsException e1){
+				return false;
+			} catch (NumberFormatException e2) {
 				return false;
 			}
 
@@ -92,6 +94,8 @@ public class CommandInterpreter implements CommandExecutor {
 			//Atempt to get an id number for the block
 			try {
 				id = Integer.parseInt(arg3[1]);
+			} catch (ArrayIndexOutOfBoundsException e1){
+				return false;
 			} catch (NumberFormatException e) {
 				return false;
 			}

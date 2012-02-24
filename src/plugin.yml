@@ -1,7 +1,7 @@
 main: net.lotrcraft.minepermit.MinePermit
 author: Numenorean95
 name: MinePermit
-version: 1.0.1
+version: 1.1
 website: http://lotrcraft.net/plugins/minepermit
 
 commands:
