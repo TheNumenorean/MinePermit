@@ -111,7 +111,7 @@ public class CommandInterpreter implements CommandExecutor {
 			
 			//Check if the player has enough money
 			//TODO: Convert to Economy plugin?
-			if (!p.getInventory().contains(371, Config.getCost(id))) {
+			if (!p.getInventory().contains(Config.currencyBlockID, Config.getCost(id))) {
 				p.sendMessage(ChatColor.DARK_RED
 						+ "You dont have enough money!");
 				return true;
@@ -121,7 +121,7 @@ public class CommandInterpreter implements CommandExecutor {
 
 			while (cost > 0) {
 				ItemStack x = p.getInventory().getItem(
-						p.getInventory().first(371));
+						p.getInventory().first(Config.currencyBlockID));
 
 				if (x.getAmount() < cost) {
 					cost -= x.getAmount();
@@ -132,7 +132,7 @@ public class CommandInterpreter implements CommandExecutor {
 				}
 			}
 
-			MinerManager.getMiner(p).addPermit(id, 60);
+			MinerManager.getMiner(p).addPermit(id, Config.permitDuration);
 
 			p.sendMessage(ChatColor.DARK_GREEN + "Permit purchased!");
 

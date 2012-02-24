@@ -14,28 +14,29 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config {
+	
+	public static int universalCost;
+	public static long permitDuration;
+	public static int currencyBlockID;
 
-	static int cost;
-	static final File pluginFolder = new File("plugins" + File.separator
-			+ "MinePermit");
-	static Logger log = Logger.getLogger("minecraft");
+	public static final File pluginFolder = new File("plugins" + File.separator + "MinePermit");
+	public static Logger log = Logger.getLogger("minecraft");
 	private static Map<Integer, Integer> blocks = new TreeMap<Integer, Integer>();
-	static final File conf = new File(pluginFolder.getPath() + File.separator
-			+ "config.yml");
+	public static final File conf = new File(pluginFolder.getPath() + File.separator + "config.yml");
 
 	public static void load(FileConfiguration config) throws IOException,
 			InvalidConfigurationException {
+		
+		universalCost = getInt("UniversalPermitCost", 300, config);
+		permitDuration = getLong("DefaultPermitDuration", 60, config);
+		currencyBlockID = getInt("currencyBlockID", 371, config);
 
 		ConfigurationSection sect = config.getConfigurationSection("Blocks");
 		Set<String> list;
 
-		if (sect == null || (list = sect.getKeys(false)) == null
-				|| list.isEmpty()) {
+		if (sect == null || (list = sect.getKeys(false)) == null || list.isEmpty()) {
 			log.warning("[MinePermit] No Blocks detected!");
 			config.set("Blocks", "");
-
-			// config.setProperty("Blocks.block.id", 2);
-			// config.setProperty("Blocks.block.time", 3);
 
 			blocks.put(3, 3);
 
@@ -43,7 +44,7 @@ public class Config {
 
 			for (int counter = 0; counter < list.size(); counter++) {
 				blocks.put(
-						getInt(list.toArray()[counter] + ".id", counter, sect),
+						getInt(list.toArray()[counter] + ".id", -1, sect),
 						getInt(list.toArray()[counter] + ".cost", 50, sect));
 
 			}
@@ -74,7 +75,7 @@ public class Config {
 								playerFiles[counter].getName().indexOf('.')));
 
 				if (!playerFiles[counter].canRead()) {
-					log.warning("Can't read file!");
+					log.warning("[MinePermit] Can't read file!");
 					continue;
 				}
 
@@ -159,28 +160,37 @@ public class Config {
 	}
 
 	// Functions for AutoUpdating the Config.yml
-	public Object getProperty(String path, Object def,
-			ConfigurationSection config) {
+	public static Object getProperty(String path, Object def, ConfigurationSection config) {
 		if (isNull(path, config))
 			return setProperty(path, def, config);
 		return config.get(path);
 	}
 
-	public static int getInt(String path, Integer def, ConfigurationSection sect) {
+	public static int getInt(String path, int def, ConfigurationSection sect) {
 		if (isNull(path, sect))
 			return (Integer) setProperty(path, def, sect);
 		return sect.getInt(path, def);
 	}
+	
+	public static long getLong(String path, long def, ConfigurationSection sect) {
+		if (isNull(path, sect))
+			return (Long) setProperty(path, def, sect);
+		return sect.getLong(path, def);
+	}
+	
+	public static Double getDouble(String path, double def, ConfigurationSection sect) {
+		if (isNull(path, sect))
+			return (Double) setProperty(path, def, sect);
+		return sect.getDouble(path, def);
+	}
 
-	public static Boolean getBoolean(String path, Boolean def,
-			ConfigurationSection config) {
+	public static Boolean getBoolean(String path, Boolean def, ConfigurationSection config) {
 		if (isNull(path, config))
 			return (Boolean) setProperty(path, def, config);
 		return config.getBoolean(path, def);
 	}
 
-	private static Object setProperty(String path, Object val,
-			ConfigurationSection sect) {
+	private static Object setProperty(String path, Object val, ConfigurationSection sect) {
 		sect.set(path, val);
 		return val;
 	}

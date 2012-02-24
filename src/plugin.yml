@@ -5,14 +5,14 @@ version: 1.0.1
 website: http://lotrcraft.net/plugins/minepermit
 
 commands:
-    wheatheal:
+    permit:
         description: List of Commands
-        aliases: permit
+        aliases: p
         usage: |
             /<command> - List of commands
-            /<command> buy [item] - Buys permit
-            /<command> cost [item] - Display cost of certain permit
-            /<command> view [item] - Displays remaining time fo permit
+            /<command> buy [id/"all"] - Buys permit
+            /<command> cost [id] - Display cost of certain permit. Leave out id to display price for universal permit
+            /<command> view {id} - Displays remaining time for permit. Leave out id to display all owned permits
 
 permissions:
     MinePermit.exempt:
