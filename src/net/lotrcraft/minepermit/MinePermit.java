@@ -33,6 +33,9 @@ public class MinePermit extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		
+		if(!Config.conf.exists())
+			this.saveResource("config.yml", false);
+		
 		this.getServer().getPluginManager().registerEvents(new BlockListener(), this);
 		
 		loadConf();

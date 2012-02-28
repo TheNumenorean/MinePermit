@@ -1,0 +1,35 @@
+# MinePermit Default Configuration File
+#
+# This file is the default configuration file for 
+# MinePermit. Though it will work by default, there
+# will be no required permits, so it will be useless.
+#
+#Example blocks:
+# 
+# 
+#
+#Blocks:
+#  gold:              #Whatever is put here doesnt matter, it is just a name for reference.
+#    id: 14           #The id number of the block
+#    cost: 20         #How much this block will cost.
+#
+#
+#    
+
+#How much the universal permit will cost (i, what is cost to buy all permits)
+UniversalPermitCost: 300
+
+#How long each permit purchase adds to the timer
+DefaultPermitDuration: 360
+
+#The item which will be removed from a player's inventory on purchase
+currencyBlockID: 260
+
+#Whether to allow players to buy several permits for the same item, which will just increase the time their permit will last.
+AllowMultiPurchase: true
+
+#Whether to use Vault to hook into an economy
+UseEconomy: false
+
+Blocks:
+   
