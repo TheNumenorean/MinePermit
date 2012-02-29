@@ -24,10 +24,10 @@ public class Miner {
 	}
 	
 	public boolean addPermit(int blockID, long minutes){
-		if (permits.containsKey(blockID))
-			return false;
-		
-		permits.put(blockID, System.currentTimeMillis() + minutes * 60000);
+		if (permits.containsKey(blockID)){
+			permits.put(blockID, permits.get(blockID) + minutes * 60000);
+		} else
+			permits.put(blockID, System.currentTimeMillis() + minutes * 60000);
 		return true;
 		
 	}

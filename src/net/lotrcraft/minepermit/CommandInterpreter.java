@@ -72,7 +72,10 @@ public class CommandInterpreter implements CommandExecutor {
 			try {
 				id = Integer.parseInt(arg3[1]);
 			} catch (ArrayIndexOutOfBoundsException e1){
-				return false;
+				
+				//If there is no number, change to Universal system
+				p.sendMessage(ChatColor.AQUA + "The cost for the Universal permit for this world is " + Config.universalCost);
+				return true;
 			} catch (NumberFormatException e2) {
 				return false;
 			}
@@ -95,6 +98,9 @@ public class CommandInterpreter implements CommandExecutor {
 			try {
 				id = Integer.parseInt(arg3[1]);
 			} catch (ArrayIndexOutOfBoundsException e1){
+				//If there is no number, change to Universal system
+				
+				
 				return false;
 			} catch (NumberFormatException e) {
 				return false;
@@ -102,39 +108,25 @@ public class CommandInterpreter implements CommandExecutor {
 
 			//Check if a permit is required for this block
 			if (!Config.isPermitRequired(id)) {
-				p.sendMessage(ChatColor.GRAY
-						+ "A permit is not required for this item.");
+				p.sendMessage(ChatColor.GRAY + "A permit is not required for this item.");
 				return true;
 			}
 			
 			//Check if the player already has a permit for this
-			if(MinerManager.getMiner(p).hasPermit(id)){
-				p.sendMessage(ChatColor.AQUA + "You already have a permit for this!");
+			if(!Config.multiPermit && MinerManager.getMiner(p).hasPermit(id)){
+				p.sendMessage(ChatColor.YELLOW + "You already have a permit for this!");
 				return true;
 			}
 			
-			//Check if the player has enough money
-			//TODO: Convert to Economy plugin?
-			if (!p.getInventory().contains(Config.currencyBlockID, Config.getCost(id))) {
-				p.sendMessage(ChatColor.DARK_RED
-						+ "You dont have enough money!");
+			//Charge player if possible
+			if (!PaymentManager.charge(p, Config.getCost(id))) {
+				p.sendMessage(ChatColor.DARK_RED + "You dont have enough money!");
 				return true;
 			}
 
-			int cost = Config.getCost(id);
+			
 
-			while (cost > 0) {
-				ItemStack x = p.getInventory().getItem(
-						p.getInventory().first(Config.currencyBlockID));
 
-				if (x.getAmount() < cost) {
-					cost -= x.getAmount();
-					x.setAmount(0);
-				} else {
-					x.setAmount(x.getAmount() - cost);
-					cost = 0;
-				}
-			}
 
 			MinerManager.getMiner(p).addPermit(id, Config.permitDuration);
 

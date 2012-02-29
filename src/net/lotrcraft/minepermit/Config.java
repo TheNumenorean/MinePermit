@@ -18,18 +18,22 @@ public class Config {
 	public static int universalCost;
 	public static long permitDuration;
 	public static int currencyBlockID;
+	public static boolean useEconomyPlugin;
 
 	public static final File pluginFolder = new File("plugins" + File.separator + "MinePermit");
 	public static Logger log = Logger.getLogger("minecraft");
 	private static Map<Integer, Integer> blocks = new TreeMap<Integer, Integer>();
+	public static boolean multiPermit = true;
+	
 	public static final File conf = new File(pluginFolder.getPath() + File.separator + "config.yml");
 
-	public static void load(FileConfiguration config) throws IOException,
-			InvalidConfigurationException {
+	public static void load(FileConfiguration config) throws IOException, InvalidConfigurationException{
 		
 		universalCost = getInt("UniversalPermitCost", 300, config);
 		permitDuration = getLong("DefaultPermitDuration", 60, config);
 		currencyBlockID = getInt("currencyBlockID", 371, config);
+		multiPermit = getBoolean("AllowMultiPurchase", true, config);
+		useEconomyPlugin = getBoolean("", false, config);
 
 		ConfigurationSection sect = config.getConfigurationSection("Blocks");
 		Set<String> list;
@@ -178,13 +182,13 @@ public class Config {
 		return sect.getLong(path, def);
 	}
 	
-	public static Double getDouble(String path, double def, ConfigurationSection sect) {
+	public static double getDouble(String path, double def, ConfigurationSection sect) {
 		if (isNull(path, sect))
 			return (Double) setProperty(path, def, sect);
 		return sect.getDouble(path, def);
 	}
 
-	public static Boolean getBoolean(String path, Boolean def, ConfigurationSection config) {
+	public static boolean getBoolean(String path, Boolean def, ConfigurationSection config) {
 		if (isNull(path, config))
 			return (Boolean) setProperty(path, def, config);
 		return config.getBoolean(path, def);
