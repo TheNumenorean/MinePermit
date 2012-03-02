@@ -1,6 +1,8 @@
 package net.lotrcraft.minepermit;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
@@ -9,8 +11,6 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.EventExecutor;
@@ -36,21 +36,24 @@ public class MinePermit extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
-		this.saveResource("config.yml", false);
-
+		//Register the blockListener
 		this.getServer().getPluginManager()
 				.registerEvents(new BlockListener(), this);
-
+		
+		//load settings from conf
 		loadConf();
-		if(Config.useEconomyPlugin){
-			if(loadVaultEcon())
+		
+		//Load economy plugins
+		if (Config.useEconomyPlugin) {
+			if (loadVaultEcon())
 				log.info("[MinePermit] Loaded Vault!");
-			else{
+			else {
 				log.warning("[MinePermit] Unnable to load Vault! Reverting to original payment method.");
 				Config.useEconomyPlugin = false;
 			}
-			
 		}
+		
+		//Set the command executer
 		getCommand("permit").setExecutor(new CommandInterpreter());
 
 		log.info("MinePermit Enabled");
@@ -58,15 +61,12 @@ public class MinePermit extends JavaPlugin {
 	}
 
 	private void loadConf() {
-
-		if (!Config.pluginFolder.exists())
-			Config.pluginFolder.mkdir();
-
-		/*
-		 * if(!Config.conf.exists()){ try { Config.conf.createNewFile(); } catch
-		 * (IOException e) {
-		 * log.warning("[MinePermit] Cannot create conf file!"); return; } }
-		 */
+		//If there is no conf save the default
+		if(!Config.conf.exists())
+			this.saveDefaultConfig();
+		
+		if(!Config.pluginFolder.exists())
+			Config.pluginFolder.mkdirs();
 
 		try {
 			Config.load(this.getConfig());
