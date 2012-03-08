@@ -33,16 +33,15 @@ public class Config {
 		permitDuration = getLong("DefaultPermitDuration", 60, config);
 		currencyBlockID = getInt("currencyBlockID", 371, config);
 		multiPermit = getBoolean("AllowMultiPurchase", true, config);
-		useEconomyPlugin = getBoolean("", false, config);
+		useEconomyPlugin = getBoolean("UseEconomy", false, config);
 
 		ConfigurationSection sect = config.getConfigurationSection("Blocks");
 		Set<String> list;
 
 		if (sect == null || (list = sect.getKeys(false)) == null || list.isEmpty()) {
 			log.warning("[MinePermit] No Blocks detected!");
-			config.set("Blocks", "");
-
-			blocks.put(3, 3);
+			if(sect == null)
+				config.createSection("Blocks");
 
 		} else {
 
@@ -55,7 +54,8 @@ public class Config {
 
 		}
 
-		config.save(conf);
+		config.options().copyHeader(false);
+		//config.save(conf);
 
 		File playerDataFolder = new File("plugins" + File.separator
 				+ "MinePermit" + File.separator + "Players");
@@ -94,6 +94,10 @@ public class Config {
 		log.info("[MinePermit] Finished loading players.");
 
 	}
+	
+	public static Map<Integer, Integer> getPermits(){
+		return blocks;
+	}
 
 	public static Miner loadPlayerConf(File file) throws FileNotFoundException,
 			IOException, InvalidConfigurationException {
@@ -103,6 +107,7 @@ public class Config {
 				file.getName().indexOf('.'));
 
 		Miner miner = new Miner(playerName);
+		miner.addUniversalPermit(getInt("UniversalPermit", 0, config));
 		ConfigurationSection sect = config.getConfigurationSection("Blocks");
 		Set<String> list;
 
@@ -135,7 +140,8 @@ public class Config {
 			}
 
 			g.load(f);
-			g.set("Blocks", null);
+			g.set("UniversalPermit", m.getRemainingUniversalTime());
+			g.createSection("Blocks");
 
 			for (int y = 0; y < p.size(); y++) {
 				

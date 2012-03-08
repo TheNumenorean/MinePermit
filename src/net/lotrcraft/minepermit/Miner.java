@@ -6,10 +6,13 @@ import java.util.TreeMap;
 public class Miner {
 	
 	private String player;
-	private Map<Integer, Long> permits = new TreeMap<Integer, Long>();
+	private Map<Integer, Long> permits;
+	private long univPermit;
+	
 
 	public Miner(String playerName){
 		this.player = playerName;
+		permits = new TreeMap<Integer, Long>();
 	}
 	
 	public String getPlayer(){
@@ -17,7 +20,7 @@ public class Miner {
 	}
 	
 	public boolean hasPermit(int blockID){
-		if(permits.containsKey(blockID) && checkTime(blockID))
+		if(permits.containsKey(blockID) && checkTime(blockID) || hasUniversalPermit())
 			return true;
 		
 		return false;
@@ -25,9 +28,9 @@ public class Miner {
 	
 	public boolean addPermit(int blockID, long minutes){
 		if (permits.containsKey(blockID)){
-			permits.put(blockID, permits.get(blockID) + minutes * 60000);
+			permits.put(blockID, permits.get(blockID) + minutes * 60000L);
 		} else
-			permits.put(blockID, System.currentTimeMillis() + minutes * 60000);
+			permits.put(blockID, System.currentTimeMillis() + minutes * 60000L);
 		return true;
 		
 	}
@@ -35,7 +38,7 @@ public class Miner {
 	public long getRemainingTime(int blockID){
 		if(!hasPermit(blockID))
 			return 0;
-		return (permits.get(blockID) - System.currentTimeMillis()) / 60000;
+		return (permits.get(blockID) - System.currentTimeMillis()) / 60000L;
 	}
 	
 	public Map<Integer, Long> getPermits(){
@@ -61,6 +64,29 @@ public class Miner {
 	
 	public String toString(){
 		return player;
+	}
+
+	public void addUniversalPermit(long permitDuration) {
+		univPermit += System.currentTimeMillis() + permitDuration * 60000L;
+		
+	}
+
+	public boolean hasUniversalPermit() {
+		if(univPermit - System.currentTimeMillis() <= 0){
+			univPermit = 0;
+			return false;
+		}
+		
+		return true;
+	}
+
+	public long getRemainingUniversalTime() {
+		if(univPermit - System.currentTimeMillis() <= 0){
+			univPermit = 0;
+			return 0;
+		}
+		
+		return (univPermit - System.currentTimeMillis()) / 60000L;
 	}
 
 }

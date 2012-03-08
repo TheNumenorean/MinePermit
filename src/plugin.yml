@@ -11,9 +11,10 @@ commands:
         aliases: p
         usage: |
             /<command> - List of commands
-            /<command> buy [id/"all"] - Buys permit
-            /<command> cost [id] - Display cost of certain permit. Leave out id to display price for universal permit
-            /<command> view {id} - Displays remaining time for permit. Leave out id to display all owned permits
+            /<command> buy [id/"universal"] - Buys permit
+            /<command> cost [id] - Display cost of certain permit. No param displays price for universal permit
+            /<command> time {id} - Displays remaining time for permit. No param displays all owned permits
+            /<command> view {id} - Returns if a permit is required for this block. No param returns all required permits
 
 permissions:
     MinePermit.exempt:

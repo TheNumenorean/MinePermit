@@ -1,19 +1,12 @@
 package net.lotrcraft.minepermit;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -61,13 +54,18 @@ public class MinePermit extends JavaPlugin {
 	}
 
 	private void loadConf() {
-		//If there is no conf save the default
-		if(!Config.conf.exists())
-			this.saveDefaultConfig();
 		
 		if(!Config.pluginFolder.exists())
 			Config.pluginFolder.mkdirs();
+		
+		
+		//If there is no conf save the default
+		if(!Config.conf.exists()){
+			saveDefaultConfig();
+		}
 
+
+		
 		try {
 			Config.load(this.getConfig());
 		} catch (IOException e) {
@@ -75,6 +73,7 @@ public class MinePermit extends JavaPlugin {
 		} catch (InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
+		
 
 	}
 
@@ -90,5 +89,4 @@ public class MinePermit extends JavaPlugin {
 		econ = rsp.getProvider();
 		return econ != null;
 	}
-
 }

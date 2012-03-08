@@ -8,7 +8,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class CommandInterpreter implements CommandExecutor {
 
@@ -28,7 +27,7 @@ public class CommandInterpreter implements CommandExecutor {
 		if (arg3.length == 0) {
 			return false;
 
-		} else if (arg3[0].equalsIgnoreCase("view")) {
+		} else if (arg3[0].equalsIgnoreCase("time")) {
 
 			Miner m = MinerManager.getMiner(p);
 
@@ -38,8 +37,12 @@ public class CommandInterpreter implements CommandExecutor {
 				id = Integer.parseInt(arg3[1]);
 			} catch (Exception e) {
 
-				String s = "";
 				Map<Integer, Long> tmp = m.getPermits();
+				
+				if(m.hasUniversalPermit()){
+					p.sendMessage(ChatColor.DARK_GREEN + "You have " + m.getRemainingUniversalTime() + " minutes left on the Universal Permit.");
+					return true;
+				}
 				
 				if(tmp.isEmpty()){
 					p.sendMessage(ChatColor.YELLOW + "You don't own any permits!");
@@ -97,13 +100,29 @@ public class CommandInterpreter implements CommandExecutor {
 			//Atempt to get an id number for the block
 			try {
 				id = Integer.parseInt(arg3[1]);
-			} catch (ArrayIndexOutOfBoundsException e1){
-				//If there is no number, change to Universal system
-				
-				
+			} catch (ArrayIndexOutOfBoundsException e1){				
 				return false;
 			} catch (NumberFormatException e) {
-				return false;
+				
+				if(!arg3[1].equalsIgnoreCase("universal"))
+					return false;
+				
+				//Check if the player already has the Universal permit
+				if(!Config.multiPermit && MinerManager.getMiner(p).hasUniversalPermit()){
+					p.sendMessage(ChatColor.YELLOW + "You already own the Universal Permit!");
+					return true;
+				}
+				
+				//Charge player if possible
+				if (!PaymentManager.charge(p, Config.universalCost)) {
+					p.sendMessage(ChatColor.DARK_RED + "You dont have enough money!");
+					return true;
+				}
+				
+				MinerManager.getMiner(p).addUniversalPermit(Config.permitDuration);
+
+				p.sendMessage(ChatColor.DARK_GREEN + "Permit purchased!");
+				return true;
 			}
 
 			//Check if a permit is required for this block
@@ -133,7 +152,38 @@ public class CommandInterpreter implements CommandExecutor {
 			p.sendMessage(ChatColor.DARK_GREEN + "Permit purchased!");
 
 			return true;
-		}
+		} else if (arg3[0].equalsIgnoreCase("view")) {
+
+			int id;
+
+			try {
+				id = Integer.parseInt(arg3[1]);
+			} catch (IndexOutOfBoundsException e) {
+
+				Map<Integer, Integer> perms = Config.getPermits();
+				String tmp = ChatColor.DARK_PURPLE + "Permits are required for: ";
+				
+				for(Integer i : perms.keySet()){
+					tmp += i +  " ";
+				}
+				
+				p.sendMessage(tmp);
+
+				return true;
+			} catch (NumberFormatException e2){
+				return false;
+			}
+
+			if (Config.isPermitRequired(id)) {
+				p.sendMessage(ChatColor.DARK_RED
+						+ "A permit is required for " + id);
+			} else {
+				p.sendMessage(ChatColor.DARK_GREEN + "A permit is not required for " + id);
+			}
+
+			return true;
+
+		} 
 
 		return false;
 	}
