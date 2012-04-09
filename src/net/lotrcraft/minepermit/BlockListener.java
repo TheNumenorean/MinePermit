@@ -16,7 +16,7 @@ public class BlockListener implements Listener {
 		
 		Player p = e.getPlayer();
 		
-		if(p.hasPermission("MinePermit.exempt"))
+		if(PlayerManager.hasPerm(p, "MinePermit.exempt"))
 			return;
 		
 		

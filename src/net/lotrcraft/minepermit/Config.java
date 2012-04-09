@@ -24,6 +24,7 @@ public class Config {
 	public static Logger log = Logger.getLogger("minecraft");
 	private static Map<Integer, Integer> blocks = new TreeMap<Integer, Integer>();
 	public static boolean multiPermit = true;
+	public static boolean useVaultPermissions;
 	
 	public static final File conf = new File(pluginFolder.getPath() + File.separator + "config.yml");
 

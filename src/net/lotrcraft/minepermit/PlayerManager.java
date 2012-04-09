@@ -5,7 +5,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class PaymentManager {
+public class PlayerManager {
 
 	public static boolean charge(Player p, int amount) {
 		if (Config.useEconomyPlugin) {
@@ -34,5 +34,12 @@ public class PaymentManager {
 			
 		}
 		
+	}
+	
+	public static boolean hasPerm(Player p, String perm){
+		if(Config.useVaultPermissions)
+			return MinePermit.perm.has(p.getWorld(), p.getName(), perm);
+		
+		return p.hasPermission(perm);
 	}
 }

@@ -114,7 +114,7 @@ public class CommandInterpreter implements CommandExecutor {
 				}
 				
 				//Charge player if possible
-				if (!PaymentManager.charge(p, Config.universalCost)) {
+				if (!PlayerManager.charge(p, Config.universalCost)) {
 					p.sendMessage(ChatColor.DARK_RED + "You dont have enough money!");
 					return true;
 				}
@@ -138,7 +138,7 @@ public class CommandInterpreter implements CommandExecutor {
 			}
 			
 			//Charge player if possible
-			if (!PaymentManager.charge(p, Config.getCost(id))) {
+			if (!PlayerManager.charge(p, Config.getCost(id))) {
 				p.sendMessage(ChatColor.DARK_RED + "You dont have enough money!");
 				return true;
 			}
