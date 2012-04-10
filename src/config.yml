@@ -28,8 +28,9 @@ currencyBlockID: 260
 #Whether to allow players to buy several permits for the same item, which will just increase the time their permit will last.
 AllowMultiPurchase: true
 
-#Whether to use Vault to hook into an economy
-UseEconomy: false
+#Whether to use Vault to hook into an economy and/or a permission system
+UseVaultEconomy: false
+UseVaultPermissions: false
 
 #The language file to use which must be in the languages folder. If blank will revert to default.
 LanguageFile:

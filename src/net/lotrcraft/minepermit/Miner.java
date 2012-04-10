@@ -67,7 +67,7 @@ public class Miner {
 	}
 
 	public void addUniversalPermit(long permitDuration) {
-		univPermit += System.currentTimeMillis() + permitDuration * 60000L;
+		univPermit = (System.currentTimeMillis() + (permitDuration +  getRemainingUniversalTime()) * 60000L);
 		
 	}
 

@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
+import net.lotrcraft.minepermit.MinePermit;
+
 import org.bukkit.ChatColor;
 
 public enum TextManager {
@@ -41,12 +43,13 @@ public enum TextManager {
 
 		try {
 			input = new FileInputStream(f);
-
+			
 			int data = input.read();
 			end = "";
 
-			while (data != -1) {
-				end += (char) data;
+			while (data > -1) {
+				end = end + (char) data;
+				data = input.read();
 			}
 
 		} catch (FileNotFoundException e) {
@@ -66,7 +69,7 @@ public enum TextManager {
 			String tmp = vals.get(t.name());
 			if (tmp == null)
 				continue;
-			t.setText(tmp);
+			t.setText(ChatColor.translateAlternateColorCodes('&', tmp));
 		}
 	}
 }

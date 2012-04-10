@@ -38,13 +38,17 @@ public class Config {
 		permitDuration = getLong("DefaultPermitDuration", 60, config);
 		currencyBlockID = getInt("currencyBlockID", 371, config);
 		multiPermit = getBoolean("AllowMultiPurchase", true, config);
-		useEconomyPlugin = getBoolean("UseEconomy", false, config);
+		useEconomyPlugin = getBoolean("UseVaultEconomy", false, config);
+		useVaultPermissions = getBoolean("UseVaultPermissions", false, config);
 		
+		
+		//Load language file
 		String tmp = getString("LanguageFile", null, config);
 		
 		try{
-		if(tmp != null)
-			TextManager.loadTextFromFile(new File(languageFolder.getPath() + File.separator + tmp));
+			if(tmp != null)
+				TextManager.loadTextFromFile(new File(languageFolder.getPath() + File.separator + tmp));
+			log.info("[MinePermit] Language file succesfully loaded!");
 		} catch (InvalidLanguageFileException e){
 			log.warning("[MinePermit] Couldn't load language file! " + e.getMessage());
 		}

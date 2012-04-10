@@ -150,7 +150,7 @@ public class CommandInterpreter implements CommandExecutor {
 
 			MinerManager.getMiner(p).addPermit(id, Config.permitDuration);
 
-			p.sendMessage(ChatColor.DARK_GREEN + "Permit purchased!");
+			p.sendMessage("" + TextManager.PURCHASE_SUCCESS);
 
 			return true;
 		} else if (arg3[0].equalsIgnoreCase("view")) {

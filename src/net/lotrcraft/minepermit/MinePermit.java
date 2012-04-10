@@ -13,7 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class MinePermit extends JavaPlugin {
 
-	static Logger log = Logger.getLogger("minecraft");
+	public static Logger log = Logger.getLogger("minecraft");
 	public static Economy econ;
 	FileConfiguration conf;
 	public static Permission perm;
