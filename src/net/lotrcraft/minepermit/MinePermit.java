@@ -57,6 +57,7 @@ public class MinePermit extends JavaPlugin {
 				Config.useVaultPermissions = false;
 			}
 		}
+		
 		//Set the command executer
 		getCommand("permit").setExecutor(new CommandInterpreter());
 
@@ -69,6 +70,9 @@ public class MinePermit extends JavaPlugin {
 		
 		if(!Config.pluginFolder.exists())
 			Config.pluginFolder.mkdirs();
+		
+		if(!Config.languageFolder.exists())
+			Config.languageFolder.mkdirs();
 		
 		
 		//If there is no conf save the default

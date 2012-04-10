@@ -8,6 +8,9 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
+import net.lotrcraft.minepermit.languages.InvalidLanguageFileException;
+import net.lotrcraft.minepermit.languages.TextManager;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,14 +22,15 @@ public class Config {
 	public static long permitDuration;
 	public static int currencyBlockID;
 	public static boolean useEconomyPlugin;
+	public static boolean multiPermit;
+	public static boolean useVaultPermissions;
 
-	public static final File pluginFolder = new File("plugins" + File.separator + "MinePermit");
 	public static Logger log = Logger.getLogger("minecraft");
 	private static Map<Integer, Integer> blocks = new TreeMap<Integer, Integer>();
-	public static boolean multiPermit = true;
-	public static boolean useVaultPermissions;
 	
+	public static final File pluginFolder = new File("plugins" + File.separator + "MinePermit");
 	public static final File conf = new File(pluginFolder.getPath() + File.separator + "config.yml");
+	public static final File languageFolder = new File(pluginFolder.getPath() + File.separator + "languages");
 
 	public static void load(FileConfiguration config) throws IOException, InvalidConfigurationException{
 		
@@ -35,6 +39,15 @@ public class Config {
 		currencyBlockID = getInt("currencyBlockID", 371, config);
 		multiPermit = getBoolean("AllowMultiPurchase", true, config);
 		useEconomyPlugin = getBoolean("UseEconomy", false, config);
+		
+		String tmp = getString("LanguageFile", null, config);
+		
+		try{
+		if(tmp != null)
+			TextManager.loadTextFromFile(new File(languageFolder.getPath() + File.separator + tmp));
+		} catch (InvalidLanguageFileException e){
+			log.warning("[MinePermit] Couldn't load language file! " + e.getMessage());
+		}
 
 		ConfigurationSection sect = config.getConfigurationSection("Blocks");
 		Set<String> list;
@@ -199,6 +212,12 @@ public class Config {
 		if (isNull(path, config))
 			return (Boolean) setProperty(path, def, config);
 		return config.getBoolean(path, def);
+	}
+	
+	public static String getString(String path, String def, ConfigurationSection config) {
+		if (isNull(path, config))
+			return (String) setProperty(path, def, config);
+		return config.getString(path, def);
 	}
 
 	private static Object setProperty(String path, Object val, ConfigurationSection sect) {

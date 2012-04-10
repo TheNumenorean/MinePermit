@@ -7,8 +7,17 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.bukkit.ChatColor;
+
 public enum TextManager {
-	GENERIC_ERROR(""), NOT_ENOUGH_MONEY(""), PURCHASE_SUCCESS("");
+	GENERIC_ERROR("An Unknown Error occcured"), 
+	NOT_ENOUGH_MONEY(ChatColor.DARK_RED + "You dont have enough money!"), 
+	PURCHASE_SUCCESS(ChatColor.DARK_GREEN + "Permit purchased!"),
+	UNIVERSAL_PERMIT_ALREADY_OWNED(ChatColor.YELLOW + "You already own the Universal Permit!"),
+	NO_PERMITS_MESSAGE(ChatColor.YELLOW + "You don't own any permits!"),
+	PERMIT_NOT_REQUIRED(ChatColor.GRAY + "A permit is not required for this item."),
+	MISSING_PERMIT_ERROR(ChatColor.DARK_RED + "You may not mine these blocks! Use /permit buy <id> to buy a permit."),
+	PERMIT_ALREADY_OWNED(ChatColor.YELLOW + "You already have a permit for this!");
 
 	private String text;
 
@@ -37,7 +46,7 @@ public enum TextManager {
 			end = "";
 
 			while (data != -1) {
-				end += (char)data;
+				end += (char) data;
 			}
 
 		} catch (FileNotFoundException e) {
@@ -45,17 +54,17 @@ public enum TextManager {
 		} catch (IOException e) {
 			throw new InvalidLanguageFileException("Can't read File!");
 		}
-		
-		for(String s : end.trim().split("\n")){
+
+		for (String s : end.trim().split("\n")) {
 			String[] tmp = s.split(":", 2);
-			if(tmp.length < 2)
+			if (tmp.length < 2)
 				continue;
 			vals.put(tmp[0], tmp[1]);
 		}
-		
-		for(TextManager t : TextManager.values()){
+
+		for (TextManager t : TextManager.values()) {
 			String tmp = vals.get(t.name());
-			if(tmp == null)
+			if (tmp == null)
 				continue;
 			t.setText(tmp);
 		}

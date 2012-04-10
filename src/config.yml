@@ -31,5 +31,8 @@ AllowMultiPurchase: true
 #Whether to use Vault to hook into an economy
 UseEconomy: false
 
+#The language file to use which must be in the languages folder. If blank will revert to default.
+LanguageFile:
+
 Blocks:
    

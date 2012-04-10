@@ -1,0 +1,8 @@
+GENERIC_ERROR: An Unknown Error occcured    
+NOT_ENOUGH_MONEY: #4You dont have enough money!    
+PURCHASE_SUCCESS: #2Permit purchased!   
+UNIVERSAL_PERMIT_ALREADY_OWNED: #eYou already own the Universal Permit!   
+NO_PERMITS_MESSAGE: #eYou don't own any permits!   
+PERMIT_NOT_REQUIRED: #7A permit is not required for this item.   
+MISSING_PERMIT_ERROR: #4You may not mine these blocks! Use /permit buy <id> to buy a permit.   
+PERMIT_ALREADY_OWNED: #eYou already have a permit for this!

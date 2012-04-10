@@ -1,5 +1,7 @@
 package net.lotrcraft.minepermit;
 
+import net.lotrcraft.minepermit.languages.TextManager;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +25,7 @@ public class BlockListener implements Listener {
 		
 		if(!MinerManager.getMiner(p).hasPermit(e.getBlock().getTypeId())){
 			e.setCancelled(true);
-			p.sendMessage(ChatColor.DARK_RED + "You may not mine these blocks! Use /permit buy <id> to buy a permit.");
+			p.sendMessage(TextManager.MISSING_PERMIT_ERROR + "");
 		}
 		
 	}

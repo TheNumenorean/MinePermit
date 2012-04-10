@@ -2,6 +2,8 @@ package net.lotrcraft.minepermit;
 
 import java.util.Map;
 
+import net.lotrcraft.minepermit.languages.TextManager;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -45,7 +47,7 @@ public class CommandInterpreter implements CommandExecutor {
 				}
 				
 				if(tmp.isEmpty()){
-					p.sendMessage(ChatColor.YELLOW + "You don't own any permits!");
+					p.sendMessage("" + TextManager.NO_PERMITS_MESSAGE);
 					return true;
 				}
 					
@@ -84,13 +86,12 @@ public class CommandInterpreter implements CommandExecutor {
 			}
 
 			if (!Config.isPermitRequired(id)) {
-				p.sendMessage(ChatColor.GRAY
-						+ "A permit is not required for this item.");
+				p.sendMessage("" + TextManager.PERMIT_NOT_REQUIRED);
 				return true;
 			}
 
 			p.sendMessage(ChatColor.AQUA + "The cost for this item is "
-					+ Config.getCost(id) + " dolars");
+					+ Config.getCost(id) + " dollars");
 			return true;
 
 		} else if (arg3[0].equalsIgnoreCase("buy")) {
@@ -109,37 +110,37 @@ public class CommandInterpreter implements CommandExecutor {
 				
 				//Check if the player already has the Universal permit
 				if(!Config.multiPermit && MinerManager.getMiner(p).hasUniversalPermit()){
-					p.sendMessage(ChatColor.YELLOW + "You already own the Universal Permit!");
+					p.sendMessage("" + TextManager.UNIVERSAL_PERMIT_ALREADY_OWNED);
 					return true;
 				}
 				
 				//Charge player if possible
 				if (!PlayerManager.charge(p, Config.universalCost)) {
-					p.sendMessage(ChatColor.DARK_RED + "You dont have enough money!");
+					p.sendMessage("" + TextManager.NOT_ENOUGH_MONEY);
 					return true;
 				}
 				
 				MinerManager.getMiner(p).addUniversalPermit(Config.permitDuration);
 
-				p.sendMessage(ChatColor.DARK_GREEN + "Permit purchased!");
+				p.sendMessage("" + TextManager.PURCHASE_SUCCESS);
 				return true;
 			}
 
 			//Check if a permit is required for this block
 			if (!Config.isPermitRequired(id)) {
-				p.sendMessage(ChatColor.GRAY + "A permit is not required for this item.");
+				p.sendMessage("" + TextManager.PERMIT_NOT_REQUIRED);
 				return true;
 			}
 			
 			//Check if the player already has a permit for this
 			if(!Config.multiPermit && MinerManager.getMiner(p).hasPermit(id)){
-				p.sendMessage(ChatColor.YELLOW + "You already have a permit for this!");
+				p.sendMessage("" + TextManager.PERMIT_ALREADY_OWNED);
 				return true;
 			}
 			
 			//Charge player if possible
 			if (!PlayerManager.charge(p, Config.getCost(id))) {
-				p.sendMessage(ChatColor.DARK_RED + "You dont have enough money!");
+				p.sendMessage("" + TextManager.NOT_ENOUGH_MONEY);
 				return true;
 			}
 
