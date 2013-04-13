@@ -11,13 +11,15 @@ public class MinePermit extends JavaPlugin {
 	
 	@Override
 	public void onDisable(){
+		
+		
+		
 	}
 	
 	@Override
 	public void onEnable(){
-	log = this.getLogger();
-	log.log(null, "Enabling MinePermit version ");
-	
-	
+		
+		log = this.getLogger();
+		log.log(null, "Enabling MinePermit version ");
 	}
 }
