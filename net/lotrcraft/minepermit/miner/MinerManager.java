@@ -22,6 +22,8 @@ public class MinerManager {
 			if(m.getName().equals(name))
 				return m;
 		}
+		
+		return null;
 	}
 	
 	public Permit getPermit(Location l){
@@ -29,5 +31,7 @@ public class MinerManager {
 			Permit p = m.getPermit(l);
 			if(p != null) return p;
 		}
+		
+		return null;
 	}
 }

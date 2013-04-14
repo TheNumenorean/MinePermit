@@ -17,5 +17,7 @@ public class MinePermit extends JavaPlugin {
 	public void onEnable(){
 		log = this.getLogger();
 		log.log(null, "Enabling MinePermit version ");
+		
+		this.getServer().getPluginManager().registerEvents(listener, this);
 	}
 }
