@@ -22,8 +22,17 @@ public class Miner{
 			if(p.contains(l))
 				return p;
 		}	
+			return null;
 	}
 	
+	public String getName(){
+		return name;
+	}
 	
-	
+	public void addPermit(Permit p){
+		
+		permits.add(p);
+		p.setOwner(this);
+		
+	}
 }
