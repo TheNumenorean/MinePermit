@@ -15,6 +15,7 @@ public class PermitWorld {
 	public static PermitWorld getNewPermitWorld(ConfigurationSection cs, String name) {
 		cs.addDefault("max_plot_size", 15);
 		cs.addDefault("min_plot_size", 60);
+		cs.addDefault("max_permits_per_player", 5);
 		cs.addDefault("calculate_cost", true);
 		cs.addDefault("un_calculated_cost_per_block", 5);
 		
@@ -27,7 +28,8 @@ public class PermitWorld {
 		new PermitWorld(cs.getInt("max_plot_size"), 
 				cs.getInt("min_plot_size"), 
 				cs.getBoolean("calculate_cost"), 
-				cs.getInt("un_calculated_cost_per_block"));
+				cs.getInt("un_calculated_cost_per_block"),
+				cs.getInt("max_permits_per_player"));
 		
 		return null;
 	}
