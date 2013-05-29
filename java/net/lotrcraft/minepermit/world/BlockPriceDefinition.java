@@ -1,12 +1,38 @@
 package net.lotrcraft.minepermit.world;
 
+import java.util.TreeMap;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 public class BlockPriceDefinition {
+	
+	TreeMap<Integer, Integer> blocks;
+	
+	public BlockPriceDefinition(){
+		blocks = new TreeMap<Integer, Integer>();
+	}
+	
+	public int getBlockPrice(int id){
+		return blocks.get(id);
+	}
+	
+	public void setBlockPrice(int id, int cost){
+		blocks.put(id, cost);
+	}
 
 	
 	public static BlockPriceDefinition getNewDefinition(ConfigurationSection cs){
-		return null;
+		BlockPriceDefinition b = new BlockPriceDefinition();
+		for(String s : cs.getKeys(false)){
+			try{
+				b.setBlockPrice(Integer.parseInt(s),cs.getInt(s));
+				
+			} catch (NumberFormatException e){
+				cs.set(s, null);
+			}
+		}
+		
+		return b;
 		
 	}
 }
