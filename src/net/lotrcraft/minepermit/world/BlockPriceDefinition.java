@@ -35,4 +35,12 @@ public class BlockPriceDefinition {
 		return b;
 		
 	}
+
+	public void save(ConfigurationSection cs) {
+		
+		for(int i : blocks.keySet()){
+			cs.set(i + "", blocks.get(i));
+		}
+		
+	}
 }

@@ -19,12 +19,12 @@ public class PermitWorld {
 	public PermitWorld(World world, int maxPlotSize, int minPlotSize, boolean calculatePlotCost, int uncalculatedCostPerBlock, int maxPlots, int spacing, BlockPriceDefinition bpd) {
 		this.maxPlotSize = maxPlotSize;
 		this.minPlotSize = minPlotSize;
-		this.setCalculatePlotCost(calculatePlotCost);
+		this.calculatePlotCost = calculatePlotCost;
 		this.uncalculatedCostPerBlock = uncalculatedCostPerBlock;
-		this.setMaxPlots(maxPlots);
+		this.maxPlots = maxPlots;
 		blockPrices = bpd;
 		this.world =  world;
-		this.setSpacing(spacing);
+		this.spacing = spacing;
 	}
 	
 	/**
@@ -71,12 +71,25 @@ public class PermitWorld {
 		
 		return true;
 	}
+	
+
+	public void save(ConfigurationSection cs) {
+		cs.set("max_plot_size", maxPlotSize);
+		cs.set("min_plot_size", minPlotSize);
+		cs.set("max_plots_per_player", maxPlots);
+		cs.set("spacing", spacing);
+		cs.set("calculate_cost", calculatePlotCost);
+		cs.set("un_calculated_cost_per_block", uncalculatedCostPerBlock);
+		
+		blockPrices.save(cs.getConfigurationSection("blocks"));
+		
+	}
 
 	public static PermitWorld getNewPermitWorld(ConfigurationSection cs, World world) {
 		cs.addDefault("max_plot_size", 10);
 		cs.addDefault("min_plot_size", 60);
 		cs.addDefault("max_plots_per_player", 5);
-		cs.addDefault("min_blocks_between_plots", 3);
+		cs.addDefault("spacing", 3);
 		cs.addDefault("calculate_cost", true);
 		cs.addDefault("un_calculated_cost_per_block", 5);
 		
@@ -91,7 +104,7 @@ public class PermitWorld {
 				cs.getBoolean("calculate_cost"), 
 				cs.getInt("un_calculated_cost_per_block"),
 				cs.getInt("max_plots_per_player"),
-				cs.getInt("min_blocks_between_plots"), bpd);
+				cs.getInt("spacing"), bpd);
 		
 		return pw;
 	}
@@ -195,5 +208,6 @@ public class PermitWorld {
 	public void setSpacing(int spacing) {
 		this.spacing = spacing;
 	}
+
 
 }
