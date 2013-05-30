@@ -77,8 +77,8 @@ public class PermitWorld {
 		cs.set("max_plot_size", maxPlotSize);
 		cs.set("min_plot_size", minPlotSize);
 		cs.set("max_plots_per_player", maxPlots);
-		cs.set("spacing", spacing);
-		cs.set("calculate_cost", calculatePlotCost);
+		cs.set("plot_spacing", spacing);
+		cs.set("calculate_plot_cost", calculatePlotCost);
 		cs.set("un_calculated_cost_per_block", uncalculatedCostPerBlock);
 		
 		blockPrices.save(cs.getConfigurationSection("blocks"));
@@ -89,8 +89,8 @@ public class PermitWorld {
 		cs.addDefault("max_plot_size", 10);
 		cs.addDefault("min_plot_size", 60);
 		cs.addDefault("max_plots_per_player", 5);
-		cs.addDefault("spacing", 3);
-		cs.addDefault("calculate_cost", true);
+		cs.addDefault("plot_spacing", 3);
+		cs.addDefault("calculate_plot_cost", true);
 		cs.addDefault("un_calculated_cost_per_block", 5);
 		
 		ConfigurationSection blocks;
@@ -101,10 +101,10 @@ public class PermitWorld {
 		
 		PermitWorld pw = new PermitWorld(world, cs.getInt("max_plot_size"), 
 				cs.getInt("min_plot_size"), 
-				cs.getBoolean("calculate_cost"), 
+				cs.getBoolean("calculate_plot_cost"), 
 				cs.getInt("un_calculated_cost_per_block"),
 				cs.getInt("max_plots_per_player"),
-				cs.getInt("spacing"), bpd);
+				cs.getInt("plot_spacing"), bpd);
 		
 		return pw;
 	}

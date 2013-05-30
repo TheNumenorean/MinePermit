@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import net.lotrcraft.minepermit.MinePermit;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 public class MinerManager {
 	
@@ -33,5 +34,10 @@ public class MinerManager {
 		}
 		
 		return null;
+	}
+
+	public Miner getMiner(Player player) {
+		return getMiner(player.getName());
+		
 	}
 }

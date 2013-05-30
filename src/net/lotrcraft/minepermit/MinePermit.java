@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import net.lotrcraft.minepermit.miner.MinerManager;
 import net.lotrcraft.minepermit.world.PermitWorld;
 import net.lotrcraft.minepermit.world.PermitWorldManager;
 
@@ -17,6 +18,7 @@ public class MinePermit extends JavaPlugin {
 	private Logger log;
 	private FileConfiguration conf;
 	private PermitWorldManager pwm;
+	private MinerManager mm;
 	
 	@Override
 	public void onLoad(){
@@ -36,11 +38,15 @@ public class MinePermit extends JavaPlugin {
 			World w;
 			if((w = this.getServer().getWorld(s)) == null)
 				log.warning("Configuration values for world " + s + " can't be loaded because the world doesn't exist.");
-			else
+			else{
+				log.info("Loading world " + s);
 				pwm.addPermitWorld(PermitWorld.getNewPermitWorld(worlds.getConfigurationSection(s), w));
+			}
 		}
 		
 		saveConf();
+		
+		mm = new MinerManager(this);
 		
 		log.info("Loaded!");
 	}
@@ -50,6 +56,8 @@ public class MinePermit extends JavaPlugin {
 		for(String name : pwm.getWorlds().keySet()){
 			pwm.getPermitWorld(name).save(conf.getConfigurationSection("worlds." + name));
 		}
+		
+		log.info("Worlds saved");
 		
 		saveConf();
 	}
@@ -67,7 +75,7 @@ public class MinePermit extends JavaPlugin {
 		
 		log.info("Enabling " + this.getDescription().getName());
 		
-		this.getServer().getPluginManager().registerEvents(new WorldListener(), this);
+		this.getServer().getPluginManager().registerEvents(new WorldListener(this), this);
 	}
 
 	/**
@@ -75,5 +83,9 @@ public class MinePermit extends JavaPlugin {
 	 */
 	public PermitWorldManager getPWM() {
 		return pwm;
+	}
+
+	public MinerManager getMinerManager() {
+		return mm;
 	}
 }
