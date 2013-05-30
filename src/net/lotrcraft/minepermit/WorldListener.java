@@ -1,8 +1,10 @@
 package net.lotrcraft.minepermit;
 
 import net.lotrcraft.minepermit.miner.Miner;
+import net.lotrcraft.minepermit.plot.Plot;
 import net.lotrcraft.minepermit.world.PermitWorld;
 
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -20,11 +22,15 @@ public class WorldListener implements Listener {
 		Miner m = mp.getMinerManager().getMiner(e.getPlayer());
 		
 		PermitWorld pw = mp.getPWM().getPermitWorld(e.getBlock().getLocation().getWorld().getName());
-		if(pw != null){
-			Plot = pw.getContainingPlot(e.getBlock().getLocation());
-		} else 
+		if(pw == null)
 			return;
+		Plot plot = pw.getContainingPlot(e.getBlock().getLocation());
 		
-		if()
+		if(plot == null){
+			e.getPlayer().sendMessage(ChatColor.RED + "Sorry! You cannot mine here. If you would like to buy a plot use the command /plot");
+		}
+		
+		if(!plot.canUse(e.getPlayer()))
+			e.getPlayer().sendMessage(ChatColor.RED + "Sorry! You cannot mine here, this plot is owned by someone else. If you would like to use it, they can give you permission.");
 	}
 }

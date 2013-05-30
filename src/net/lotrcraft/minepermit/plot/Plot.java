@@ -1,12 +1,16 @@
 package net.lotrcraft.minepermit.plot;
 
+import java.util.ArrayList;
+
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 public class Plot {
 
 	private Location location1;
 	private Location location2;
 	private String owner;
+	private ArrayList<String> allowed_players;
 
 	public Plot(Location location1, Location location2, String owner) {
 		
@@ -17,6 +21,8 @@ public class Plot {
 		this.setLocation2(location2);
 		
 		this.owner = owner;
+		
+		allowed_players = new ArrayList<String>();
 	}
 	
 	public Plot(Location location1, Location location2) {
@@ -86,6 +92,30 @@ public class Plot {
 			return false;
 		
 		return true;
+	}
+	
+	public void addPlayer(Player p){
+		addPlayer(p.getName());
+	}
+	
+	public void addPlayer(String name){
+		allowed_players.add(name);
+	}
+	
+	public boolean removePlayer(Player p){
+		return removePlayer(p.getName());
+	}
+	
+	public boolean removePlayer(String name){
+		return allowed_players.remove(name);
+	}
+
+	public boolean canUse(Player player) {
+		return canUse(player.getName());
+	}
+	
+	public boolean canUse(String name){
+		return name.equals(owner) || allowed_players.contains(name);
 	}
 
 	/**

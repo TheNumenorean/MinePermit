@@ -14,7 +14,7 @@ public class PermitWorld {
 	private boolean calculatePlotCost;
 	private BlockPriceDefinition blockPrices;
 	private World world;
-	private ArrayList<Plot> plots = new ArrayList<Plot>();
+	private ArrayList<Plot> plots;
 
 	public PermitWorld(World world, int maxPlotSize, int minPlotSize, boolean calculatePlotCost, int uncalculatedCostPerBlock, int maxPlots, int spacing, BlockPriceDefinition bpd) {
 		this.maxPlotSize = maxPlotSize;
@@ -25,6 +25,8 @@ public class PermitWorld {
 		blockPrices = bpd;
 		this.world =  world;
 		this.spacing = spacing;
+		
+		plots = new ArrayList<Plot>();
 	}
 	
 	/**
@@ -83,6 +85,13 @@ public class PermitWorld {
 		
 		blockPrices.save(cs.getConfigurationSection("blocks"));
 		
+	}
+	
+	public Plot getContainingPlot(Location location) {
+		for(Plot p : plots)
+			if(p.contains(location))
+				return p;
+		return null;
 	}
 
 	public static PermitWorld getNewPermitWorld(ConfigurationSection cs, World world) {
