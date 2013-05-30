@@ -8,18 +8,30 @@ public class Plot {
 	private Location location2;
 	private String owner;
 
-	public Plot(Location location1, Location location2) {
+	public Plot(Location location1, Location location2, String owner) {
 		
 		if(!location1.getWorld().equals(location2.getWorld()))
 			throw new IllegalArgumentException("Must be in same world!");
 		
 		this.setLocation1(location1);
 		this.setLocation2(location2);
+		
+		this.owner = owner;
 	}
 	
+	public Plot(Location location1, Location location2) {
+		this(location1, location2, null);
+	}
+
+	/**
+	 * Checks if either this or the given plot intersects each other.
+	 * @param p Plot to check
+	 * @param spacing Spacing to include incase this is for testing for a valid new plot
+	 * @return True if there is any intersection.
+	 */
 	public boolean intersects(Plot p, int spacing){
 		
-		return !contains(p, spacing) && !p.contains(this, spacing);
+		return contains(p, spacing) || p.contains(this, spacing);
 	}
 	
 	/**
@@ -41,13 +53,24 @@ public class Plot {
 		Location l3 = new Location(p.location1.getWorld(), lowerX, 0, higherZ);
 		Location l4 = new Location(p.location1.getWorld(), lowerX, 0, lowerZ);
 		
-		return !(contains(l1, spacing) || contains(l2, spacing) || contains(l3, spacing) || contains(l4, spacing));
+		return contains(l1, spacing) || contains(l2, spacing) || contains(l3, spacing) || contains(l4, spacing);
 	}
 	
+	/**
+	 * Checks if the given point is contained in the plot. And they better be in the same world.
+	 * @param l Location being checked
+	 * @return True if it is contained in the plot.3
+	 */
 	public boolean contains(Location l){
 		return contains(l, 0);
 	}
 	
+	/**
+	 * Checks if the given point is contained in the plot. And they better be in the same world.
+	 * @param l Location being checked
+	 * @param spacing Layer aound the plot to also search.
+	 * @return True if it is contained in the plot.3
+	 */
 	public boolean contains(Location l, int spacing){
 		
 		if(!location1.getWorld().equals(l.getWorld()))
@@ -59,7 +82,7 @@ public class Plot {
 		int higherZ = Math.max(location1.getBlockZ(), location2.getBlockZ()) + spacing;
 		int lowerZ = Math.min(location1.getBlockZ(), location2.getBlockZ()) - spacing;
 		
-		if(l.getBlockX() > lowerX || l.getBlockX() < higherX && l.getBlockZ() > lowerZ || l.getBlockZ() < higherZ)
+		if(l.getBlockX() < lowerX || l.getBlockX() > higherX && l.getBlockZ() < lowerZ || l.getBlockZ() > higherZ)
 			return false;
 		
 		return true;
