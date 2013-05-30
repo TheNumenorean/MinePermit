@@ -1,0 +1,12 @@
+main: net.lotrcraft.minepermit.MinePermit
+author: Numenorean95
+authors: tcoan98
+name: MapLoader
+version: 2.0.0
+
+commands:
+    plot:
+        description: Deals with buying and managing plots.
+        usage: |
+            /<command> list [world]
+        permission: mp.plot
