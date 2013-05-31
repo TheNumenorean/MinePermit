@@ -15,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class MinePermit extends JavaPlugin {
 
-	private Logger log;
+	public Logger log;
 	private FileConfiguration conf;
 	private PermitWorldManager pwm;
 	private MinerManager mm;
@@ -47,6 +47,8 @@ public class MinePermit extends JavaPlugin {
 		saveConf();
 		
 		mm = new MinerManager(this);
+		
+		this.getCommand("plot").setExecutor(new PlotCommandInterpreter(this));
 		
 		log.info("Loaded!");
 	}

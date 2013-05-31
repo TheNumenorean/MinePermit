@@ -2,6 +2,8 @@ package net.lotrcraft.minepermit.world;
 
 import java.util.TreeMap;
 
+import org.bukkit.World;
+
 public class PermitWorldManager {
 	
 	private TreeMap<String, PermitWorld> worlds;
@@ -16,6 +18,10 @@ public class PermitWorldManager {
 	
 	public PermitWorld getPermitWorld(String name){
 		return worlds.get(name);
+	}
+	
+	public PermitWorld getPermitWorld(World w) {
+		return getPermitWorld(w.getName());
 	}
 
 	/**

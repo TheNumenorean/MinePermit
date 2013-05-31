@@ -9,4 +9,7 @@ commands:
         description: Deals with buying and managing plots.
         usage: |
             /<command> list [world]
+            /<command> price <x>:<z> <x>:<z>
+            /<command> buy <x>:<z> <x>:<z> [name]
+            /<command> <plot_name>
         permission: mp.plot

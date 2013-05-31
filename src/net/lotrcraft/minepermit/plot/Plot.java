@@ -2,6 +2,7 @@ package net.lotrcraft.minepermit.plot;
 
 import java.util.ArrayList;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -11,8 +12,9 @@ public class Plot {
 	private Location location2;
 	private String owner;
 	private ArrayList<String> allowed_players;
+	private String name;
 
-	public Plot(Location location1, Location location2, String owner) {
+	public Plot(Location location1, Location location2, String owner, String name) {
 		
 		if(!location1.getWorld().equals(location2.getWorld()))
 			throw new IllegalArgumentException("Must be in same world!");
@@ -21,12 +23,13 @@ public class Plot {
 		this.setLocation2(location2);
 		
 		this.owner = owner;
+		this.name = name;
 		
 		allowed_players = new ArrayList<String>();
 	}
 	
 	public Plot(Location location1, Location location2) {
-		this(location1, location2, null);
+		this(location1, location2, null, null);
 	}
 
 	/**
@@ -118,6 +121,14 @@ public class Plot {
 		return name.equals(owner) || allowed_players.contains(name);
 	}
 
+	@Override
+	public boolean equals(Object o){
+		
+		Plot p = (Plot)o;
+		
+		return p.location1.equals(location1) && p.location2.equals(location2);
+	}
+	
 	/**
 	 * @return the location1
 	 */
@@ -158,6 +169,20 @@ public class Plot {
 	 */
 	public void setOwner(String owner) {
 		this.owner = owner;
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name){
+		this.name = name;
+	}
+	
+	@Override
+	public String toString(){
+		return "Plot " + getName() + " in world " + location1.getWorld().getName() + " at coords (" + 
+				getLocation1().getBlockX() + "," + getLocation1().getBlockZ() + ") (" + getLocation2().getBlockX() + "," + getLocation2().getBlockZ() + ")";
 	}
 
 }

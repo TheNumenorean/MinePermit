@@ -12,7 +12,7 @@ public class PermitWorld {
 	
 	private int maxPlotSize, minPlotSize, uncalculatedCostPerBlock, maxPlots, spacing;
 	private boolean calculatePlotCost;
-	private BlockPriceDefinition blockPrices;
+	private BlockPriceDefinition plotBlockPrices;
 	private World world;
 	private ArrayList<Plot> plots;
 
@@ -22,7 +22,7 @@ public class PermitWorld {
 		this.calculatePlotCost = calculatePlotCost;
 		this.uncalculatedCostPerBlock = uncalculatedCostPerBlock;
 		this.maxPlots = maxPlots;
-		blockPrices = bpd;
+		plotBlockPrices = bpd;
 		this.world =  world;
 		this.spacing = spacing;
 		
@@ -83,7 +83,7 @@ public class PermitWorld {
 		cs.set("calculate_plot_cost", calculatePlotCost);
 		cs.set("un_calculated_cost_per_block", uncalculatedCostPerBlock);
 		
-		blockPrices.save(cs.getConfigurationSection("blocks"));
+		plotBlockPrices.save(cs.getConfigurationSection("plot_block_prices"));
 		
 	}
 	
@@ -103,8 +103,8 @@ public class PermitWorld {
 		cs.addDefault("un_calculated_cost_per_block", 5);
 		
 		ConfigurationSection blocks;
-		if((blocks = cs.getConfigurationSection("blocks")) == null)
-			blocks = cs.createSection("blocks");
+		if((blocks = cs.getConfigurationSection("plot_block_prices")) == null)
+			blocks = cs.createSection("plot_block_prices");
 		
 		BlockPriceDefinition bpd = BlockPriceDefinition.getNewDefinition(blocks);
 		
@@ -180,7 +180,7 @@ public class PermitWorld {
 	 * @return the blockPrices
 	 */
 	public BlockPriceDefinition getBlockPrices() {
-		return blockPrices;
+		return plotBlockPrices;
 	}
 
 	/**
@@ -216,6 +216,10 @@ public class PermitWorld {
 	 */
 	public void setSpacing(int spacing) {
 		this.spacing = spacing;
+	}
+
+	public ArrayList<Plot> getPlots() {
+		return plots;
 	}
 
 
