@@ -2,19 +2,23 @@ package net.lotrcraft.minepermit.miner;
 
 import java.util.ArrayList;
 
+import net.lotrcraft.minepermit.plot.Plot;
+
 import org.bukkit.Location;
 
 public class Miner{
+	
+	private ArrayList<Plot> plots;
+	private ArrayList<Permit> permits;
+	private String name;
 	
 	public Miner(String name){
 		
 		this.name = name;
 		permits = new ArrayList<Permit>();
+		plots = new ArrayList<Plot>();
 		
 	}
-	
-	private ArrayList<Permit> permits;
-	private String name;
 	
 	public Permit getPermit(Location l)
 	{
@@ -34,5 +38,21 @@ public class Miner{
 		permits.add(p);
 		p.setOwner(this);
 		
+	}
+
+	public ArrayList<Plot> getPlots() {
+		return plots;
+	}
+	
+	public boolean removePlot(Plot p){
+		return plots.remove(p);
+	}
+	
+	public boolean addPlot(Plot p){
+		if(!p.getOwner().equals(name))
+			return false;
+		
+		plots.add(p);
+		return true;
 	}
 }

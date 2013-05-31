@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class Plot {
@@ -119,6 +120,16 @@ public class Plot {
 	
 	public boolean canUse(String name){
 		return name.equals(owner) || allowed_players.contains(name);
+	}
+	
+
+	/**
+	 * Puts a block at each of the four corners to mark this Plot.
+	 */
+	public void createCorners() {
+		location1.getWorld().getHighestBlockAt(location1).setType(Material.DIAMOND_BLOCK);
+		location2.getWorld().getHighestBlockAt(location2).setType(Material.DIAMOND_BLOCK);
+		
 	}
 
 	@Override
