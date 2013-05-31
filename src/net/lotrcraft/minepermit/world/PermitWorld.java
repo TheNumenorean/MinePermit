@@ -41,7 +41,7 @@ public class PermitWorld {
 	 */
 	public Plot getNewPlot(int x1, int z1, int x2, int z2){
 		
-		Plot plot = new Plot(new Location(world, x1, 0, z1), new Location(world, x2, 0, z2));
+		Plot plot = new Plot(new Location(world, x1, 0, z1), new Location(world, x2, 0, z2), null, null, this);
 		
 		if(!checkValidPlot(plot))
 			return null;
@@ -163,9 +163,9 @@ public class PermitWorld {
 	}
 
 	/**
-	 * @return the calculatePlotCost
+	 * @return Whether this world's plots should have their cost calculated from ore costs or should use a flat fee.
 	 */
-	public boolean isCalculatePlotCost() {
+	public boolean isPlotCostCalculated() {
 		return calculatePlotCost;
 	}
 
@@ -179,7 +179,7 @@ public class PermitWorld {
 	/**
 	 * @return the blockPrices
 	 */
-	public BlockPriceDefinition getBlockPrices() {
+	public BlockPriceDefinition getPlotBlockPrices() {
 		return plotBlockPrices;
 	}
 

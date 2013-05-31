@@ -2,9 +2,13 @@ package net.lotrcraft.minepermit.plot;
 
 import java.util.ArrayList;
 
-import org.bukkit.ChatColor;
+import net.lotrcraft.minepermit.world.BlockPriceDefinition;
+import net.lotrcraft.minepermit.world.PermitWorld;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public class Plot {
@@ -14,23 +18,26 @@ public class Plot {
 	private String owner;
 	private ArrayList<String> allowed_players;
 	private String name;
+	private PermitWorld pw;
 
-	public Plot(Location location1, Location location2, String owner, String name) {
+	public Plot(Location location1, Location location2, String owner, String name, PermitWorld permitWorld) {
+		if(location1 == null || location2 == null)
+			throw new IllegalArgumentException("Locations cannot be null!");
 		
 		if(!location1.getWorld().equals(location2.getWorld()))
 			throw new IllegalArgumentException("Must be in same world!");
+		
+		if(permitWorld == null)
+			throw new IllegalArgumentException("Supplied PermitWorld cannot be null!");
 		
 		this.setLocation1(location1);
 		this.setLocation2(location2);
 		
 		this.owner = owner;
 		this.name = name;
+		this.pw = permitWorld;
 		
 		allowed_players = new ArrayList<String>();
-	}
-	
-	public Plot(Location location1, Location location2) {
-		this(location1, location2, null, null);
 	}
 
 	/**
@@ -98,26 +105,58 @@ public class Plot {
 		return true;
 	}
 	
+	/**
+	 * Adds a Player to this plot's list of people who are allowed to mine and build on it,
+	 * though they do not have owner privileges.
+	 * @param p The player to add
+	 */
 	public void addPlayer(Player p){
 		addPlayer(p.getName());
 	}
 	
+	/**
+	 * Adds a Player to this plot's list of people who are allowed to mine and build on it,
+	 * though they do not have owner privileges.
+	 * @param name name of the Player to add
+	 */
 	public void addPlayer(String name){
 		allowed_players.add(name);
 	}
 	
+	/**
+	 * Removes a player from this plot's list of trusted players.
+	 * @param p Player to remove
+	 * @return Whether the player was able to be removed
+	 */
 	public boolean removePlayer(Player p){
 		return removePlayer(p.getName());
 	}
 	
+	/**
+	 * Removes a player from this plot's list of trusted players.
+	 * @param name Name of the Player to remove
+	 * @return Whether the player was able to be removed
+	 */
 	public boolean removePlayer(String name){
 		return allowed_players.remove(name);
 	}
 
+	/**
+	 * Checks if a player is allowed to use (mine and build on) this plot. 
+	 * Includes both the owner and trusted players.
+	 * @param player Player to check
+	 * @return true if they do have permission
+	 */
 	public boolean canUse(Player player) {
 		return canUse(player.getName());
 	}
 	
+	/**
+	 * Checks if a player is allowed to use (mine and build on) this plot. 
+	 * Includes both the owner and trusted players.
+	 * @param name Name of the Player to check
+	 * @return true if they do have permission
+	 */
 	public boolean canUse(String name){
 		return name.equals(owner) || allowed_players.contains(name);
 	}
@@ -130,6 +169,43 @@ public class Plot {
 		location1.getWorld().getHighestBlockAt(location1).setType(Material.DIAMOND_BLOCK);
 		location2.getWorld().getHighestBlockAt(location2).setType(Material.DIAMOND_BLOCK);
 		
+	}
+	
+	public int calculateCost(){
+		if(pw.isPlotCostCalculated()){
+			
+			int cost = 0;
+			
+			int higherX = Math.max(location1.getBlockX(), location2.getBlockX());
+			int lowerX = Math.min(location1.getBlockX(), location2.getBlockX());
+			
+			int higherZ = Math.max(location1.getBlockZ(), location2.getBlockZ());
+			int lowerZ = Math.min(location1.getBlockZ(), location2.getBlockZ());
+			
+			BlockPriceDefinition bpd = pw.getPlotBlockPrices();
+			
+			World w = location1.getWorld();
+			for(int x = lowerX; x <= higherX; x++){
+				
+				for(int z = lowerZ; z <= higherZ; z++){
+					
+					for(int y = 0; y <= w.getHighestBlockYAt(x, z); y++){
+						
+						Block b = w.getBlockAt(x, y, z);
+						
+						if(b.getTypeId() != Material.AIR.getId())
+							cost += bpd.getBlockPrice(b.getTypeId());
+					}
+					
+				}
+				
+			}
+			
+			return cost;
+			
+		} else {
+			return pw.getUncalculatedCostPerBlock() * Math.abs((location1.getBlockX() - location2.getBlockX()) * (location1.getBlockZ() - location2.getBlockZ()));
+		}
 	}
 
 	@Override
@@ -182,10 +258,18 @@ public class Plot {
 		this.owner = owner;
 	}
 
+	/**
+	 * Gets this plot's name, if set.
+	 * @return The name or null
+	 */
 	public String getName() {
 		return name;
 	}
 	
+	/**
+	 * Sets this plot's name
+	 * @param name Name to set to.
+	 */
 	public void setName(String name){
 		this.name = name;
 	}

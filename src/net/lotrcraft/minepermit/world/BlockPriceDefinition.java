@@ -13,7 +13,8 @@ public class BlockPriceDefinition {
 	}
 	
 	public int getBlockPrice(int id){
-		return blocks.get(id);
+		Integer i = blocks.get(id);
+		return i == null? 0 : i;
 	}
 	
 	public void setBlockPrice(int id, int cost){

@@ -55,4 +55,11 @@ public class Miner{
 		plots.add(p);
 		return true;
 	}
+
+	public Plot getPlot(String name) {
+		for(Plot p : plots)
+			if(p.getName().equals(name))
+				return p;
+		return null;
+	}
 }
