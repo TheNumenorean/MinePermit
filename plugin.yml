@@ -13,3 +13,9 @@ commands:
             /<command> buy <x>:<z> <x>:<z> [name]
             /<command> <plot_name>
         permission: mp.plot
+    minepermit:
+        description: Core minepermit commands
+        alias: mp
+        usage: |
+            /<command> init <world>
+        permission: mp.core

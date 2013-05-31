@@ -49,6 +49,7 @@ public class MinePermit extends JavaPlugin {
 		mm = new MinerManager(this);
 		
 		this.getCommand("plot").setExecutor(new PlotCommandInterpreter(this));
+		this.getCommand("minepermit").setExecutor(new CoreCommandInterpreter(this));
 		
 		log.info("Loaded!");
 	}
@@ -62,6 +63,19 @@ public class MinePermit extends JavaPlugin {
 		log.info("Worlds saved");
 		
 		saveConf();
+	}
+	
+	public boolean initWorld(World w){
+		
+		if(pwm.getPermitWorld(w) != null)
+			return false;
+		
+		conf.getConfigurationSection("worlds");
+		pwm.addPermitWorld(PermitWorld.getNewPermitWorld(conf.createSection(w.getName()), w));
+		
+		saveConf();
+		
+		return true;
 	}
 	
 	private void saveConf(){
