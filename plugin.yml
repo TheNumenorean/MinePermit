@@ -1,7 +1,7 @@
 main: net.lotrcraft.minepermit.MinePermit
 author: Numenorean95
 authors: [tcoan98]
-name: MapLoader
+name: MinePermit
 version: 2.0.0
 
 commands:
