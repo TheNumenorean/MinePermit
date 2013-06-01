@@ -1,5 +1,5 @@
 package net.lotrcraft.minepermit;
-
+ 
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -15,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class MinePermit extends JavaPlugin {
 
-	public Logger log;
+	public static Logger log;
 	private FileConfiguration conf;
 	private PermitWorldManager pwm;
 	private MinerManager mm;

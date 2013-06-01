@@ -2,6 +2,7 @@ package net.lotrcraft.minepermit.world;
 
 import java.util.ArrayList;
 
+import net.lotrcraft.minepermit.MinePermit;
 import net.lotrcraft.minepermit.plot.Plot;
 
 import org.bukkit.Location;
@@ -64,8 +65,7 @@ public class PermitWorld {
 		if(Math.abs(p.getLocation1().getBlockX() - p.getLocation2().getBlockX()) < minPlotSize || Math.abs(p.getLocation1().getBlockX() - p.getLocation2().getBlockX()) > maxPlotSize || Math.abs(p.getLocation1().getBlockZ() - p.getLocation2().getBlockZ()) < minPlotSize || Math.abs(p.getLocation1().getBlockZ() - p.getLocation2().getBlockZ()) > maxPlotSize)
 			return false;
 		
-		System.out.println(Math.abs(p.getLocation1().getBlockX() - p.getLocation2().getBlockX()) + " " + minPlotSize);
-		System.out.println(Math.abs(p.getLocation1().getBlockZ() - p.getLocation2().getBlockZ()) + " " + maxPlotSize);
+
 		
 		for(Plot plot : plots){
 			if(p.getLocation1().getBlockX() - p.getLocation2().getBlockX() < 2 * maxPlotSize + spacing &&
@@ -98,8 +98,8 @@ public class PermitWorld {
 	}
 
 	public static PermitWorld getNewPermitWorld(ConfigurationSection cs, World world) {
-		cs.addDefault("max_plot_size", 10);
-		cs.addDefault("min_plot_size", 60);
+		cs.addDefault("max_plot_size", 60);
+		cs.addDefault("min_plot_size", 10);
 		cs.addDefault("max_plots_per_player", 5);
 		cs.addDefault("plot_spacing", 3);
 		cs.addDefault("calculate_plot_cost", true);

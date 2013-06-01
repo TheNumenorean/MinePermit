@@ -28,9 +28,14 @@ public class WorldListener implements Listener {
 		
 		if(plot == null){
 			e.getPlayer().sendMessage(ChatColor.RED + "Sorry! You cannot mine here. If you would like to buy a plot use the command /plot");
+			e.setCancelled(true);
+			return;
 		}
 		
-		if(!plot.canUse(e.getPlayer()))
+		if(!plot.canUse(e.getPlayer())){
 			e.getPlayer().sendMessage(ChatColor.RED + "Sorry! You cannot mine here, this plot is owned by someone else. If you would like to use it, they can give you permission.");
+			e.setCancelled(true);
+			return;
+		}
 	}
 }
