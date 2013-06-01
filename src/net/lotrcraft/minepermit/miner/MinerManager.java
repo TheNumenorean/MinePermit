@@ -24,7 +24,11 @@ public class MinerManager {
 				return m;
 		}
 		
-		return null;
+		Miner m = new Miner(name);
+		
+		miners.add(m);
+		
+		return m;
 	}
 	
 	public Permit getPermit(Location l){

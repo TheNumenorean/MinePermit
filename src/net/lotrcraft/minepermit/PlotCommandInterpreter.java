@@ -1,5 +1,7 @@
 package net.lotrcraft.minepermit;
 
+import java.util.ArrayList;
+
 import net.lotrcraft.minepermit.miner.Miner;
 import net.lotrcraft.minepermit.plot.Plot;
 import net.lotrcraft.minepermit.world.PermitWorld;
@@ -47,6 +49,11 @@ public class PlotCommandInterpreter implements CommandExecutor {
 					sender.sendMessage(ChatColor.DARK_GRAY + "That world is not able to have plots.");
 				}
 				
+				if(pw.getPlots().size() == 0)
+					sender.sendMessage("You have no plots in that world!");
+				else
+					sender.sendMessage("Your Plots in world " + w.getName() + ":");
+				
 				for (Plot p : pw.getPlots()){
 					if(p.getOwner().equals(sender.getName()))
 						sender.sendMessage(ChatColor.GREEN + p.toString());
@@ -57,8 +64,14 @@ public class PlotCommandInterpreter implements CommandExecutor {
 				return true;
 			} else {
 				
-				sender.sendMessage("Your Plots:");
-				for (Plot p : mp.getMinerManager().getMiner(sender.getName()).getPlots()){
+				ArrayList<Plot> plots = mp.getMinerManager().getMiner(sender.getName()).getPlots();
+				
+				if(plots.size() == 0)
+					sender.sendMessage("You have no plots!");
+				else
+					sender.sendMessage("Your Plots:");
+				
+				for (Plot p : plots){
 					sender.sendMessage(ChatColor.GREEN + p.toString());
 				}
 				

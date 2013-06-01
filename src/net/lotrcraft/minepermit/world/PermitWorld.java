@@ -64,6 +64,9 @@ public class PermitWorld {
 		if(Math.abs(p.getLocation1().getBlockX() - p.getLocation2().getBlockX()) < minPlotSize || Math.abs(p.getLocation1().getBlockX() - p.getLocation2().getBlockX()) > maxPlotSize || Math.abs(p.getLocation1().getBlockZ() - p.getLocation2().getBlockZ()) < minPlotSize || Math.abs(p.getLocation1().getBlockZ() - p.getLocation2().getBlockZ()) > maxPlotSize)
 			return false;
 		
+		System.out.println(Math.abs(p.getLocation1().getBlockX() - p.getLocation2().getBlockX()) + " " + minPlotSize);
+		System.out.println(Math.abs(p.getLocation1().getBlockZ() - p.getLocation2().getBlockZ()) + " " + maxPlotSize);
+		
 		for(Plot plot : plots){
 			if(p.getLocation1().getBlockX() - p.getLocation2().getBlockX() < 2 * maxPlotSize + spacing &&
 					p.getLocation1().getBlockZ() - p.getLocation2().getBlockZ() < 2 * maxPlotSize + spacing)
