@@ -2,6 +2,7 @@ package net.lotrcraft.minepermit.plot;
 
 import java.util.ArrayList;
 
+import net.lotrcraft.minepermit.MinePermit;
 import net.lotrcraft.minepermit.world.BlockPriceDefinition;
 import net.lotrcraft.minepermit.world.PermitWorld;
 
@@ -99,10 +100,10 @@ public class Plot {
 		int higherZ = Math.max(location1.getBlockZ(), location2.getBlockZ()) + spacing;
 		int lowerZ = Math.min(location1.getBlockZ(), location2.getBlockZ()) - spacing;
 		
-		if(l.getBlockX() < lowerX || l.getBlockX() > higherX && l.getBlockZ() < lowerZ || l.getBlockZ() > higherZ)
-			return false;
+		if(l.getBlockX() >= lowerX && l.getBlockX() <= higherX && l.getBlockZ() >= lowerZ && l.getBlockZ() <= higherZ)
+			return true;
 		
-		return true;
+		return false;
 	}
 	
 	/**

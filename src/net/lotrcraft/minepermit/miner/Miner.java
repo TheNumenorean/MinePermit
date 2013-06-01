@@ -49,10 +49,11 @@ public class Miner{
 	}
 	
 	public boolean addPlot(Plot p){
-		if(!p.getOwner().equals(name))
+		if(p.getOwner() != null && !p.getOwner().equals(name))
 			return false;
 		
 		plots.add(p);
+		p.setOwner(name);
 		return true;
 	}
 
