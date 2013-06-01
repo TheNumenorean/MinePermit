@@ -23,7 +23,6 @@ public class MinePermit extends JavaPlugin {
 	@Override
 	public void onLoad(){
 		log = this.getLogger();
-		log.info("Loading " + this.getDescription().getName() + " version " + this.getDescription().getVersion());
 		
 		conf = this.getConfig();
 		conf.options().copyDefaults(true);
@@ -47,9 +46,6 @@ public class MinePermit extends JavaPlugin {
 		saveConf();
 		
 		mm = new MinerManager(this);
-		
-		this.getCommand("plot").setExecutor(new PlotCommandInterpreter(this));
-		this.getCommand("minepermit").setExecutor(new CoreCommandInterpreter(this));
 		
 		log.info("Loaded!");
 	}
@@ -89,9 +85,14 @@ public class MinePermit extends JavaPlugin {
 	@Override
 	public void onEnable(){
 		
-		log.info("Enabling " + this.getDescription().getName());
+		getCommand("plot").setExecutor(new PlotCommandInterpreter(this));
+		getCommand("minepermit").setExecutor(new CoreCommandInterpreter(this));
 		
 		this.getServer().getPluginManager().registerEvents(new WorldListener(this), this);
+		
+		log.info("Enabled!");
+		
+		
 	}
 
 	/**
