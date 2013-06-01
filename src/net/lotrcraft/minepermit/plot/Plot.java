@@ -60,16 +60,20 @@ public class Plot {
 	 */
 	public boolean contains(Plot p, int spacing){
 		
-		int higherX = Math.max(p.location1.getBlockX(), p.location2.getBlockX()) + spacing;
-		int lowerX = Math.min(p.location1.getBlockX(), p.location2.getBlockX()) - spacing;
+		int higherX = Math.max(p.location1.getBlockX(), p.location2.getBlockX());
+		int lowerX = Math.min(p.location1.getBlockX(), p.location2.getBlockX());
 		
-		int higherZ = Math.max(p.location1.getBlockZ(), p.location2.getBlockZ()) + spacing;
-		int lowerZ = Math.min(p.location1.getBlockZ(), p.location2.getBlockZ()) - spacing;
+		int higherZ = Math.max(p.location1.getBlockZ(), p.location2.getBlockZ());
+		int lowerZ = Math.min(p.location1.getBlockZ(), p.location2.getBlockZ());
 		
 		Location l1 = new Location(p.location1.getWorld(), higherX, 0, higherZ);
 		Location l2 = new Location(p.location1.getWorld(), higherX, 0, lowerZ);
 		Location l3 = new Location(p.location1.getWorld(), lowerX, 0, higherZ);
 		Location l4 = new Location(p.location1.getWorld(), lowerX, 0, lowerZ);
+		
+		
+		MinePermit.log.info(higherX + " " + lowerX + " " + higherZ + " " + lowerZ);
+		MinePermit.log.info(contains(l1, spacing) + " " + contains(l2, spacing) + " " + contains(l3, spacing) + " " + contains(l4, spacing));
 		
 		return contains(l1, spacing) || contains(l2, spacing) || contains(l3, spacing) || contains(l4, spacing);
 	}
