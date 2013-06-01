@@ -34,6 +34,8 @@ public class CoreCommandInterpreter implements CommandExecutor {
 					mp.log.info("Invalid world!");
 				else 
 					sender.sendMessage(ChatColor.RED + "Invalid World!");
+				
+				return true;
 			}
 			
 			if(mp.getPWM().getPermitWorld(w) != null){
@@ -42,6 +44,8 @@ public class CoreCommandInterpreter implements CommandExecutor {
 					mp.log.info("World already initialized!");
 				else 
 					sender.sendMessage(ChatColor.RED + "World already initialized!");
+				
+				return true;
 			}
 			
 			if(mp.initWorld(w)){
@@ -57,6 +61,8 @@ public class CoreCommandInterpreter implements CommandExecutor {
 				else 
 					sender.sendMessage(ChatColor.RED + "Couldn't initialize world!");
 			}
+			
+			return true;
 			
 			
 		}

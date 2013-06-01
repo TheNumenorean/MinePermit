@@ -15,7 +15,7 @@ commands:
         permission: mp.plot
     minepermit:
         description: Core minepermit commands
-        alias: mp
+        aliases: mp
         usage: |
             /<command> init <world>
         permission: mp.core
