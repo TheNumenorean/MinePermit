@@ -53,6 +53,7 @@ public class MinePermit extends JavaPlugin {
 	@Override
 	public void onDisable(){
 		for(String name : pwm.getWorlds().keySet()){
+			log.info("Saving world " + name);
 			pwm.getPermitWorld(name).save(conf.getConfigurationSection("worlds." + name));
 		}
 		
@@ -66,8 +67,8 @@ public class MinePermit extends JavaPlugin {
 		if(pwm.getPermitWorld(w) != null)
 			return false;
 		
-		conf.getConfigurationSection("worlds");
-		pwm.addPermitWorld(PermitWorld.getNewPermitWorld(conf.createSection(w.getName()), w));
+		ConfigurationSection worlds = conf.getConfigurationSection("worlds");
+		pwm.addPermitWorld(PermitWorld.getNewPermitWorld(worlds.createSection(w.getName()), w));
 		
 		saveConf();
 		
