@@ -2,7 +2,7 @@ main: net.lotrcraft.minepermit.MinePermit
 author: Numenorean95
 authors: [tcoan98]
 name: MinePermit
-version: 2.0.0
+version: 2.0.1
 
 commands:
     plot:
