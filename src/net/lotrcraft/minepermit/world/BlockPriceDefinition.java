@@ -24,6 +24,15 @@ public class BlockPriceDefinition {
 	
 	public static BlockPriceDefinition getNewDefinition(ConfigurationSection cs){
 		BlockPriceDefinition b = new BlockPriceDefinition();
+		
+		cs.addDefault("21", 50);
+		cs.addDefault("14", 30);
+		cs.addDefault("15", 20);
+		cs.addDefault("16", 10);
+		cs.addDefault("56", 150);
+		cs.addDefault("73", 80);
+		cs.addDefault("129", 130);
+		
 		for(String s : cs.getKeys(false)){
 			try{
 				b.setBlockPrice(Integer.parseInt(s),cs.getInt(s));
