@@ -109,6 +109,18 @@ public class PlotCommandInterpreter implements CommandExecutor {
 				return true;
 			}
 			
+			Miner m = mp.getMinerManager().getMiner(sender.getName());
+			
+			int numPlots = 0;
+			for(Plot p : m.getPlots())
+				if(p.getLocation1().getWorld().equals(pw.getWorld()))
+					numPlots++;
+			
+			if(numPlots >= pw.getMaxPlots()){
+				sender.sendMessage(ChatColor.DARK_RED + "You already have the maximum number of plots for this world!");
+				return true;
+			}
+			
 			//TODO: Charge player
 			
 			if(!pw.registerPlot(new1)){
@@ -116,7 +128,7 @@ public class PlotCommandInterpreter implements CommandExecutor {
 				return true;
 			}
 			
-			Miner m = mp.getMinerManager().getMiner(sender.getName());
+			
 			
 			if(args.length >= 4)
 				new1.setName(args[3]);

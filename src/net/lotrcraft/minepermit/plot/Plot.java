@@ -71,10 +71,6 @@ public class Plot {
 		Location l3 = new Location(p.location1.getWorld(), lowerX, 0, higherZ);
 		Location l4 = new Location(p.location1.getWorld(), lowerX, 0, lowerZ);
 		
-		
-		MinePermit.log.info(higherX + " " + lowerX + " " + higherZ + " " + lowerZ);
-		MinePermit.log.info(contains(l1, spacing) + " " + contains(l2, spacing) + " " + contains(l3, spacing) + " " + contains(l4, spacing));
-		
 		return contains(l1, spacing) || contains(l2, spacing) || contains(l3, spacing) || contains(l4, spacing);
 	}
 	
