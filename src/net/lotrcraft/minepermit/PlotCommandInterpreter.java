@@ -47,6 +47,7 @@ public class PlotCommandInterpreter implements CommandExecutor {
 				PermitWorld pw = mp.getPWM().getPermitWorld(w);
 				if(pw == null){
 					sender.sendMessage(ChatColor.DARK_GRAY + "That world is not able to have plots.");
+					return true;
 				}
 				
 				if(pw.getPlots().size() == 0)
