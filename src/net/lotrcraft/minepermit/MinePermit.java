@@ -52,10 +52,10 @@ public class MinePermit extends JavaPlugin {
 	
 	@Override
 	public void onDisable(){
-		for(String name : pwm.getWorlds().keySet()){
+		/*for(String name : pwm.getWorlds().keySet()){
 			log.info("Saving world " + name);
 			pwm.getPermitWorld(name).save(conf.getConfigurationSection("worlds." + name));
-		}
+		}*/
 		
 		log.info("Worlds saved");
 		
